@@ -2,7 +2,14 @@ package gotwitter
 
 import (
 	"bufio"
+	"bytes"
+	"compress/gzip"
+	"encoding/base64"
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"net/http"
+	"net/url"
 	"os"
 	"strings"
 )
@@ -69,6 +76,76 @@ func NewApplication(debug int, params ...string) (*Application, error) {
 	}, nil
 }
 
+// Authorize this application.
+// See more at
+// https://developer.twitter.com/en/docs/basics/authentication/overview/application-only
+func (app *Application) Authorize() error {
+	httpClient := &http.Client{}
+	req, err := app.request()
+	if err != nil {
+		return err
+	}
+	resp, err := httpClient.Do(req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	token := struct {
+		TokenType   string `json:"token_type"`
+		AccessToken string `json:"access_token"`
+	}{}
+	gzipReader, err := gzip.NewReader(resp.Body)
+	if err != nil {
+		return fmt.Errorf("error<*Application.Authorize> err=%s", err)
+	}
+	if app.debugLevel > 1 {
+		if buff, err := ioutil.ReadAll(gzipReader); err == nil {
+			fmt.Printf("[DEBUG 2]*Application.Authorize() buff <---> %s\n", string(buff))
+			if err := json.NewDecoder(bytes.NewBuffer(buff)).Decode(&token); err != nil {
+				return fmt.Errorf("error<*Application.Authorize> err=%s", err)
+			}
+		} else {
+			return fmt.Errorf("error<*Application.Authorize> err=%s", err)
+		}
+	} else {
+		if err := json.NewDecoder(gzipReader).Decode(&token); err != nil {
+			return fmt.Errorf("error<*Application.Authorize> err=%s", err)
+		}
+	}
+	app.BearerToken = token.AccessToken
+	return nil
+}
+
+func (app *Application) tokenCredentials() (base64Encoded string) {
+	encodedCK := url.QueryEscape(app.ConsumerKey)
+	encodedCS := url.QueryEscape(app.ConsumerSecret)
+	bearer := encodedCK + ":" + encodedCS
+	base64Encoded = base64.StdEncoding.EncodeToString([]byte(bearer))
+	if app.debugLevel > 1 {
+		fmt.Printf("[DEBUG 2]*Application.tokenCredentials(): base64Encoded <---> %s\n",
+			base64Encoded,
+		)
+	}
+	return
+}
+
+func (app *Application) request() (*http.Request, error) {
+	req, err := http.NewRequest("POST",
+		"https://api.twitter.com/oauth2/token",
+		strings.NewReader("grant_type=client_credentials"),
+	)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Add("User-Agent", app.Name)
+	req.Header.Add("Authorization", "Basic "+app.tokenCredentials())
+	req.Header.Add("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8")
+	req.Header.Add("Accept-Encoding", "gzip")
+
+	return req, nil
+}
+
 func getConfig(debug int, filename string) (map[string]string, error) {
 	configs := make(map[string]string)
 
@@ -84,7 +161,7 @@ func getConfig(debug int, filename string) (map[string]string, error) {
 		line, err := br.ReadString('\n')
 		line = strings.Trim(line, "\n") // remove '\n'
 		if debug > 1 {
-			fmt.Printf("NewApplication(): read line from .conf flie <---> %s\n", line)
+			fmt.Printf("[DEBUG 2]NewApplication(): read line from .conf flie <---> %s\n", line)
 		}
 
 		if strings.Contains(line, "=") {
