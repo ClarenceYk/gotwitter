@@ -6,6 +6,9 @@ import (
 
 func TestNewApplication(t *testing.T) {
 	app, _ := NewApplication(3)
-	app.Authorize()
+	err := app.Authorize()
+	if err != nil {
+		t.Log(err)
+	}
 	t.Log(app)
 }

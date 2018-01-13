@@ -28,12 +28,13 @@ type Application struct {
 // passed your consumer key and consumer secret to
 // this funcation(consumer key followed by consumer secret).
 //
-// If you pass 3 paramters to *params* that meas you passed
+// If you pass 3 paramters to *params* that means you passed
 // your consumer key, consumer secret and application name to
 // this function(consumer key followed by consumer secret and name).
 //
-// You also can pass noting to this funcation and it will obtain the keys from
-// keys.conf file. The format of keys.conf file is like:
+// You can pass noting to this funcation so that the function will
+// obtain the infos from keys.conf file automatically.
+// The format of keys.conf file is like:
 //   consumerKey=<your consumer key>
 //   consumerSecret=<your consumer screte>
 //   name=<your application name> /*optional*/
@@ -91,6 +92,10 @@ func (app *Application) Authorize() error {
 	}
 	defer resp.Body.Close()
 
+	if resp.StatusCode != 200 {
+		return app.authorizeError(resp)
+	}
+
 	token := struct {
 		TokenType   string `json:"token_type"`
 		AccessToken string `json:"access_token"`
@@ -115,6 +120,47 @@ func (app *Application) Authorize() error {
 	}
 	app.BearerToken = token.AccessToken
 	return nil
+}
+
+func (app *Application) authorizeError(resp *http.Response) error {
+	errors := struct {
+		Errs []struct {
+			Code    int    `json:"code"`
+			Label   string `json:"label"`
+			Message string `json:"message"`
+		} `json:"errors"`
+	}{}
+
+	gzipReader, err := gzip.NewReader(resp.Body)
+	if err != nil {
+		return fmt.Errorf("error<*Application.authorizeError> err=%s", err)
+	}
+	if app.debugLevel > 1 {
+		if buff, err := ioutil.ReadAll(gzipReader); err == nil {
+			fmt.Printf("[DEBUG 2]*Application.authorizeError() buff <---> %s\n", string(buff))
+			if err := json.NewDecoder(bytes.NewBuffer(buff)).Decode(&errors); err != nil {
+				return fmt.Errorf("error<*Application.authorizeError> err=%s", err)
+			}
+		} else {
+			return fmt.Errorf("error<*Application.authorizeError> err=%s", err)
+		}
+	} else {
+		if err := json.NewDecoder(gzipReader).Decode(&errors); err != nil {
+			return fmt.Errorf("error<*Application.authorizeError> err=%s", err)
+		}
+	}
+
+	errStr := ""
+	for i, err := range errors.Errs {
+		errStr = fmt.Sprintf("err_%d=[code]%d;[label]%s;[msg]%s %s",
+			i,
+			err.Code,
+			err.Label,
+			err.Message,
+			errStr,
+		)
+	}
+	return fmt.Errorf("error<*Application.Authorize> %s", errStr)
 }
 
 func (app *Application) tokenCredentials() (base64Encoded string) {
