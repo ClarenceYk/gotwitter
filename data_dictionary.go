@@ -20,8 +20,8 @@ type Tweet struct {
 	QuotedStatusID       int64       `json:"quoted_status_id"`
 	QuotedStatusIDStr    string      `json:"quoted_status_id_str"`
 	IsQuoteStatus        bool        `json:"is_quote_status"`
-	QuotedStatus         interface{} `json:"quoted_status"`
-	RetweetedStatus      interface{} `json:"retweeted_status"`
+	QuotedStatus         *Tweet      `json:"quoted_status"`
+	RetweetedStatus      *Tweet      `json:"retweeted_status"`
 	QuoteCount           int         `json:"quote_count"`
 	ReplyCount           int         `json:"reply_count"`
 	RetweetCount         int         `json:"retweet_count"`
@@ -63,7 +63,7 @@ type User struct {
 	ProfileBackgroundColor         string      `json:"profile_background_color"`
 	ProfileBackgroundImageURL      string      `json:"profile_background_image_url"`
 	ProfileBackgroundImageURLHttps string      `json:"profile_background_image_url_https"`
-	ProfileBackgroundTile          string      `json:"profile_background_tile"`
+	ProfileBackgroundTile          bool        `json:"profile_background_tile"`
 	ProfileBannerURL               string      `json:"profile_banner_url"`
 	ProfileImageURL                string      `json:"profile_image_url"`
 	ProfileImageURLHttps           string      `json:"profile_image_url_https"`
@@ -71,9 +71,9 @@ type User struct {
 	ProfileSidebarBorderColor      string      `json:"profile_sidebar_border_color"`
 	ProfileSidebarFillColor        string      `json:"profile_sidebar_fill_color"`
 	ProfileTextColor               string      `json:"profile_text_color"`
-	ProfileUseBackgroundImage      string      `json:"profile_use_background_image"`
-	DefaultProfile                 string      `json:"default_profile"`
-	DefaultProfileImage            string      `json:"default_profile_image"`
+	ProfileUseBackgroundImage      bool        `json:"profile_use_background_image"`
+	DefaultProfile                 bool        `json:"default_profile"`
+	DefaultProfileImage            bool        `json:"default_profile_image"`
 	WithheldInCountries            string      `json:"withheld_in_countries"`
 	WithheldScope                  string      `json:"withheld_scope"`
 }

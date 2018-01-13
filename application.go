@@ -21,6 +21,7 @@ type Application struct {
 	Name           string
 	BearerToken    string
 	debugLevel     int
+	httpClient     *http.Client
 }
 
 // NewApplication creates a new application.
@@ -74,6 +75,7 @@ func NewApplication(debug int, params ...string) (*Application, error) {
 		ConsumerSecret: consumerSecret,
 		Name:           name,
 		debugLevel:     debug,
+		httpClient:     &http.Client{},
 	}, nil
 }
 
@@ -81,19 +83,18 @@ func NewApplication(debug int, params ...string) (*Application, error) {
 // See more at
 // https://developer.twitter.com/en/docs/basics/authentication/overview/application-only
 func (app *Application) Authorize() error {
-	httpClient := &http.Client{}
 	req, err := app.request()
 	if err != nil {
 		return err
 	}
-	resp, err := httpClient.Do(req)
+	resp, err := app.httpClient.Do(req)
 	if err != nil {
 		return err
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != 200 {
-		return app.authorizeError(resp)
+		return app.requestError(resp)
 	}
 
 	token := struct {
@@ -122,7 +123,8 @@ func (app *Application) Authorize() error {
 	return nil
 }
 
-func (app *Application) authorizeError(resp *http.Response) error {
+// requestError handle the unexpected status.
+func (app *Application) requestError(resp *http.Response) error {
 	errors := struct {
 		Errs []struct {
 			Code    int    `json:"code"`
@@ -133,20 +135,20 @@ func (app *Application) authorizeError(resp *http.Response) error {
 
 	gzipReader, err := gzip.NewReader(resp.Body)
 	if err != nil {
-		return fmt.Errorf("error<*Application.authorizeError> err=%s", err)
+		return err
 	}
 	if app.debugLevel > 1 {
 		if buff, err := ioutil.ReadAll(gzipReader); err == nil {
 			fmt.Printf("[DEBUG 2]*Application.authorizeError() buff <---> %s\n", string(buff))
 			if err := json.NewDecoder(bytes.NewBuffer(buff)).Decode(&errors); err != nil {
-				return fmt.Errorf("error<*Application.authorizeError> err=%s", err)
+				return err
 			}
 		} else {
-			return fmt.Errorf("error<*Application.authorizeError> err=%s", err)
+			return err
 		}
 	} else {
 		if err := json.NewDecoder(gzipReader).Decode(&errors); err != nil {
-			return fmt.Errorf("error<*Application.authorizeError> err=%s", err)
+			return err
 		}
 	}
 
@@ -160,7 +162,7 @@ func (app *Application) authorizeError(resp *http.Response) error {
 			errStr,
 		)
 	}
-	return fmt.Errorf("error<*Application.Authorize> %s", errStr)
+	return fmt.Errorf("%s", errStr)
 }
 
 func (app *Application) tokenCredentials() (base64Encoded string) {
