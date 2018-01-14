@@ -17,6 +17,7 @@ const (
 	followerIDsBaseURL   = "https://api.twitter.com/1.1/followers/ids.json?"
 	followersListBaseURL = "https://api.twitter.com/1.1/followers/list.json?"
 	friendIDsBaseURL     = "https://api.twitter.com/1.1/friends/ids.json?"
+	friendsListBaseURL   = "https://api.twitter.com/1.1/friends/list.json?"
 )
 
 func (app *Application) userTimelineReq(param *UserTimelineParam) (*http.Request, error) {
@@ -33,6 +34,10 @@ func (app *Application) followersListReq(param *FollowersListParam) (*http.Reque
 
 func (app *Application) friendIDsReq(param *FriendIDsParam) (*http.Request, error) {
 	return app.getRequest(friendIDsBaseURL, param)
+}
+
+func (app *Application) friendsListReq(param *FriendsListParam) (*http.Request, error) {
+	return app.getRequest(friendsListBaseURL, param)
 }
 
 func (app *Application) getRequest(baseURL string, param interface{}) (*http.Request, error) {
@@ -76,7 +81,7 @@ func (app *Application) doRequest(req *http.Request) (io.ReadCloser, error) {
 		return debugReadCloser{gzipReader, resp.Body}, nil
 	}
 
-	return normalReadCloser{resp.Body, resp.Body}, nil
+	return normalReadCloser{gzipReader, resp.Body}, nil
 }
 
 // requestError handle the unexpected status.

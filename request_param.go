@@ -39,3 +39,13 @@ type FriendIDsParam struct {
 	StringifyIDs bool   `url:"stringify_ids,omitempty"`
 	Count        int    `url:"count,omitempty"`
 }
+
+// FriendsListParam holds the paramters for retrieving a friends list of a specified user.
+type FriendsListParam struct {
+	UserID              int64  `url:"user_id,omitempty"`
+	ScreenName          string `url:"screen_name,omitempty"`
+	Cursor              int64  `url:"cursor,omitempty"`
+	Count               int    `url:"count,omitempty"`
+	SkipStatus          bool   `url:"skip_status,omitempty"`
+	IncludeUserEntities bool   `url:"include_user_entities"`
+}

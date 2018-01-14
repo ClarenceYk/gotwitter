@@ -69,7 +69,7 @@ func TestFollowersList(t *testing.T) {
 }
 
 func TestFriendIDs(t *testing.T) {
-	app, _ := NewApplication(2)
+	app, _ := NewApplication(0)
 
 	param := &FriendIDsParam{
 		ScreenName: "MaYukkee",
@@ -81,5 +81,24 @@ func TestFriendIDs(t *testing.T) {
 		t.Error(err)
 	} else {
 		t.Log(*ids)
+	}
+}
+
+func TestFriendsList(t *testing.T) {
+	app, _ := NewApplication(1)
+
+	param := &FriendsListParam{
+		ScreenName:          "MaYukkee",
+		Count:               10,
+		IncludeUserEntities: false,
+	}
+
+	fs, err := app.FriendsList(param)
+	if err != nil {
+		t.Error(err)
+	} else {
+		for _, user := range fs.Users {
+			t.Log(user.ScreenName, user.Name)
+		}
 	}
 }

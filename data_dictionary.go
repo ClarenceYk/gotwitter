@@ -222,3 +222,13 @@ type FriendIDs struct {
 	PreviousCursor    int64   `json:"previous_cursor"`
 	PreviousCursorStr string  `json:"previous_cursor_str"`
 }
+
+// FriendsList holds all the information of a friends list of a specified user.
+// See more at https://developer.twitter.com/en/docs/accounts-and-users/follow-search-get-users/api-reference/get-friends-list:
+type FriendsList struct {
+	Users             []*User `json:"users"`
+	NextCursor        int64   `json:"next_cursor"`
+	NextCursorStr     string  `json:"next_cursor_str"`
+	PreviousCursor    int64   `json:"previous_cursor"`
+	PreviousCursorStr string  `json:"previous_cursor_str"`
+}
