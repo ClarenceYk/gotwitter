@@ -127,48 +127,6 @@ func (app *Application) Authorize() error {
 	return nil
 }
 
-// requestError handle the unexpected status.
-func (app *Application) requestError(resp *http.Response) error {
-	errors := struct {
-		Errs []struct {
-			Code    int    `json:"code"`
-			Label   string `json:"label"`
-			Message string `json:"message"`
-		} `json:"errors"`
-	}{}
-
-	gzipReader, err := gzip.NewReader(resp.Body)
-	if err != nil {
-		return err
-	}
-	if app.debugLevel > 1 {
-		if buff, err := ioutil.ReadAll(gzipReader); err == nil {
-			fmt.Printf("[DEBUG 2]*Application.authorizeError() buff <---> %s\n", string(buff))
-			if err := json.NewDecoder(bytes.NewBuffer(buff)).Decode(&errors); err != nil {
-				return err
-			}
-		} else {
-			return err
-		}
-	} else {
-		if err := json.NewDecoder(gzipReader).Decode(&errors); err != nil {
-			return err
-		}
-	}
-
-	errStr := ""
-	for i, err := range errors.Errs {
-		errStr = fmt.Sprintf("err_%d=[code]%d;[label]%s;[msg]%s %s",
-			i,
-			err.Code,
-			err.Label,
-			err.Message,
-			errStr,
-		)
-	}
-	return fmt.Errorf("%s", errStr)
-}
-
 func (app *Application) tokenCredentials() (base64Encoded string) {
 	encodedCK := url.QueryEscape(app.ConsumerKey)
 	encodedCS := url.QueryEscape(app.ConsumerSecret)
@@ -191,7 +149,7 @@ func (app *Application) request() (*http.Request, error) {
 		return nil, err
 	}
 
-	addHeadersForAuthRequest(req, app)
+	addHeadersForAuthRequest(req, app.Name, app.tokenCredentials())
 
 	return req, nil
 }

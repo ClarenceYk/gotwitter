@@ -5,12 +5,12 @@ import (
 )
 
 func TestUserTimeline(t *testing.T) {
-	app, _ := NewApplication(1)
+	app, _ := NewApplication(2)
 
 	param := &UserTimelineParam{
-		UserID: 933516360365121536,
+		UserID: 750713,
 		// ScreenName: "MaYukkee",
-		Count: 10,
+		Count: 1,
 	}
 
 	ts, err := app.UserTimeline(param)
@@ -31,7 +31,7 @@ func TestUserTimeline(t *testing.T) {
 }
 
 func TestFollowerIDs(t *testing.T) {
-	app, _ := NewApplication(1)
+	app, _ := NewApplication(2)
 
 	param := &FollowerIDsParam{
 		ScreenName:   "MaYukkee",
@@ -48,7 +48,7 @@ func TestFollowerIDs(t *testing.T) {
 }
 
 func TestFollowersList(t *testing.T) {
-	app, _ := NewApplication(1)
+	app, _ := NewApplication(2)
 
 	param := &FollowersListParam{
 		ScreenName:          "MaYukkee",
@@ -65,5 +65,21 @@ func TestFollowersList(t *testing.T) {
 			t.Log(user.IDInt)
 			t.Log(user.IDStr)
 		}
+	}
+}
+
+func TestFriendIDs(t *testing.T) {
+	app, _ := NewApplication(2)
+
+	param := &FriendIDsParam{
+		ScreenName: "MaYukkee",
+		Count:      3,
+	}
+
+	ids, err := app.FriendIDs(param)
+	if err != nil {
+		t.Error(err)
+	} else {
+		t.Log(*ids)
 	}
 }

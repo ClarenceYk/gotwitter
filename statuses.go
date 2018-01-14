@@ -1,18 +1,7 @@
 package gotwitter
 
 import (
-	"bytes"
-	"compress/gzip"
 	"encoding/json"
-	"fmt"
-	"io/ioutil"
-	"net/http"
-
-	"github.com/google/go-querystring/query"
-)
-
-const (
-	userTimelineBaseURL = "https://api.twitter.com/1.1/statuses/user_timeline.json?"
 )
 
 // UserTimeline fetch a timeline of a special user.
@@ -23,57 +12,16 @@ func (app *Application) UserTimeline(param *UserTimelineParam) ([]*Tweet, error)
 		return nil, err
 	}
 
-	resp, err := app.httpClient.Do(req)
+	grc, err := app.doRequest(req)
 	if err != nil {
 		return nil, err
 	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != 200 {
-		return nil, app.requestError(resp)
-	}
-
-	gzipReader, err := gzip.NewReader(resp.Body)
-	if err != nil {
-		return nil, err
-	}
+	defer grc.Close()
 
 	ts := make([]*Tweet, 0)
-	if app.debugLevel > 1 {
-		if buff, err := ioutil.ReadAll(gzipReader); err == nil {
-			fmt.Printf("[DEBUG 2]*Application.UserTimeline() buff <---> %s\n", string(buff))
-			if err := json.NewDecoder(bytes.NewBuffer(buff)).Decode(&ts); err != nil {
-				return nil, err
-			}
-		} else {
-			return nil, err
-		}
-	} else {
-		if err := json.NewDecoder(gzipReader).Decode(&ts); err != nil {
-			return nil, err
-		}
+	if err := json.NewDecoder(grc).Decode(&ts); err != nil {
+		return nil, err
 	}
 
 	return ts, nil
-}
-
-func (app *Application) userTimelineReq(param *UserTimelineParam) (*http.Request, error) {
-	v, err := query.Values(param)
-	if err != nil {
-		return nil, err
-	}
-
-	qstr := userTimelineBaseURL + v.Encode()
-	if app.debugLevel > 0 {
-		fmt.Printf("[DEBUG 1]*Application.userTimelineReq() query <---> %s\n", qstr)
-	}
-
-	req, err := http.NewRequest("GET", qstr, nil)
-	if err != nil {
-		return nil, err
-	}
-
-	addHeadersForRetrieveRequest(req, app)
-
-	return req, nil
 }

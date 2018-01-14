@@ -166,7 +166,7 @@ type Poll struct {
 type Places struct {
 	ID          string      `json:"id"`
 	URL         string      `json:"url"`
-	PlaceType   string      `json:""`
+	PlaceType   string      `json:"place_type"`
 	Name        string      `json:"name"`
 	FullName    string      `json:"full_name"`
 	CounryCode  string      `json:"country_code"`
@@ -177,8 +177,8 @@ type Places struct {
 
 // BoundingBox holds the information of area.
 type BoundingBox struct {
-	Coordinates [4][2]float64 `json:"coordinates"`
-	Type        string        `json:"type"`
+	Coordinates [][4][2]float64 `json:"coordinates"`
+	Type        string          `json:"type"`
 }
 
 // Coordinates holds the information of exact point.
@@ -187,7 +187,13 @@ type Coordinates struct {
 	Type        string     `json:"type"`
 }
 
-// FollowerIDs holds all the information of followers id of user.
+// ID holds the information of resource's id.
+type ID struct {
+	IDInt int64  `json:"id"`
+	IDStr string `json:"id_str"`
+}
+
+// FollowerIDs holds all the information of followers id of a specified user.
 // See more at https://developer.twitter.com/en/docs/accounts-and-users/follow-search-get-users/api-reference/get-followers-ids
 type FollowerIDs struct {
 	IDs               []int64 `json:"ids"`
@@ -197,16 +203,20 @@ type FollowerIDs struct {
 	PreviousCursorStr string  `json:"previous_cursor_str"`
 }
 
-// ID holds the information of resource's id.
-type ID struct {
-	IDInt int64  `json:"id"`
-	IDStr string `json:"id_str"`
-}
-
-// FollowersList holds all the information of followers id of user.
+// FollowersList holds all the information of followers id of a specified user.
 // See more at https://developer.twitter.com/en/docs/accounts-and-users/follow-search-get-users/api-reference/get-followers-list
 type FollowersList struct {
 	Users             []*User `json:"users"`
+	NextCursor        int64   `json:"next_cursor"`
+	NextCursorStr     string  `json:"next_cursor_str"`
+	PreviousCursor    int64   `json:"previous_cursor"`
+	PreviousCursorStr string  `json:"previous_cursor_str"`
+}
+
+// FriendIDs holds all the information of friends id of a specified user.
+// See more at https://developer.twitter.com/en/docs/accounts-and-users/follow-search-get-users/api-reference/get-friends-ids
+type FriendIDs struct {
+	IDs               []int64 `json:"ids"`
 	NextCursor        int64   `json:"next_cursor"`
 	NextCursorStr     string  `json:"next_cursor_str"`
 	PreviousCursor    int64   `json:"previous_cursor"`
