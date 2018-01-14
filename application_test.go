@@ -4,8 +4,8 @@ import (
 	"testing"
 )
 
-func TestNewApplication(t *testing.T) {
-	app, _ := NewApplication(2)
+func TestUserTimeline(t *testing.T) {
+	app, _ := NewApplication(1)
 
 	param := &UserTimelineParam{
 		UserID: 933516360365121536,
@@ -28,16 +28,42 @@ func TestNewApplication(t *testing.T) {
 		}
 	}
 
-	// param := &FollowerIDsParam{
-	// 	ScreenName:   "MaYukkee",
-	// 	Count:        3,
-	// 	StringifyIDs: true,
-	// }
+}
 
-	// ids, err := app.FollowerIDs(param)
-	// if err != nil {
-	// 	t.Error(err)
-	// } else {
-	// 	t.Log(*ids)
-	// }
+func TestFollowerIDs(t *testing.T) {
+	app, _ := NewApplication(1)
+
+	param := &FollowerIDsParam{
+		ScreenName:   "MaYukkee",
+		Count:        3,
+		StringifyIDs: true,
+	}
+
+	ids, err := app.FollowerIDs(param)
+	if err != nil {
+		t.Error(err)
+	} else {
+		t.Log(*ids)
+	}
+}
+
+func TestFollowersList(t *testing.T) {
+	app, _ := NewApplication(1)
+
+	param := &FollowersListParam{
+		ScreenName:          "MaYukkee",
+		Count:               3,
+		IncludeUserEntities: true,
+	}
+
+	list, err := app.FollowersList(param)
+	if err != nil {
+		t.Error(err)
+	} else {
+		for _, user := range list.Users {
+			t.Log(*user)
+			t.Log(user.IDInt)
+			t.Log(user.IDStr)
+		}
+	}
 }

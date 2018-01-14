@@ -199,6 +199,16 @@ type FollowerIDs struct {
 
 // ID holds the information of resource's id.
 type ID struct {
-	ID    int64  `json:"id"`
+	IDInt int64  `json:"id"`
 	IDStr string `json:"id_str"`
+}
+
+// FollowersList holds all the information of followers id of user.
+// See more at https://developer.twitter.com/en/docs/accounts-and-users/follow-search-get-users/api-reference/get-followers-list
+type FollowersList struct {
+	Users             []*User `json:"users"`
+	NextCursor        int64   `json:"next_cursor"`
+	NextCursorStr     string  `json:"next_cursor_str"`
+	PreviousCursor    int64   `json:"previous_cursor"`
+	PreviousCursorStr string  `json:"previous_cursor_str"`
 }

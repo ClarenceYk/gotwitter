@@ -64,6 +64,10 @@ func (app *Application) userTimelineReq(param *UserTimelineParam) (*http.Request
 	}
 
 	qstr := userTimelineBaseURL + v.Encode()
+	if app.debugLevel > 0 {
+		fmt.Printf("[DEBUG 1]*Application.userTimelineReq() query <---> %s\n", qstr)
+	}
+
 	req, err := http.NewRequest("GET", qstr, nil)
 	if err != nil {
 		return nil, err

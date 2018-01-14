@@ -21,7 +21,7 @@ func getConfig(debug int, filename string) (map[string]string, error) {
 	br := bufio.NewReader(file)
 	for {
 		line, err := br.ReadString('\n')
-		line = strings.Trim(line, "\n") // remove '\n'
+		line = strings.Trim(line, " \n") // remove '\n'
 		if debug > 1 {
 			fmt.Printf("[DEBUG 2]getConfig(): read line from .conf flie <---> %s\n", line)
 		}
