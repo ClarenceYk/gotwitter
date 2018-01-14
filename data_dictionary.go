@@ -232,3 +232,35 @@ type FriendsList struct {
 	PreviousCursor    int64   `json:"previous_cursor"`
 	PreviousCursorStr string  `json:"previous_cursor_str"`
 }
+
+// Relationship holds the information of the relationship between two users.
+// See more at https://developer.twitter.com/en/docs/accounts-and-users/follow-search-get-users/api-reference/get-friendships-show
+type Relationship struct {
+	Relationship struct {
+		Target Target `json:"target"`
+		Source Source `json:"source"`
+	} `json:"relationship"`
+}
+
+// Target holds the information of the target user.
+type Target struct {
+	ID
+	ScreenName string `json:"screen_name"`
+	Following  bool   `json:"following"`
+	FollowedBy bool   `json:"followed_by"`
+}
+
+// Source holds the information of the source user.
+type Source struct {
+	ID
+	CanDM                bool   `json:"can_dm"`
+	Blocking             bool   `json:"blocking"`
+	Muting               bool   `json:"muting"`
+	AllReplies           bool   `json:"all_replies"`
+	WantRetweets         bool   `json:"want_retweets"`
+	MarkedSpam           bool   `json:"marked_spam"`
+	ScreenName           string `json:"screen_name"`
+	Following            bool   `json:"following"`
+	FollowedBy           bool   `json:"followed_by"`
+	NotificationsEnabled bool   `json:"notifications_enabled"`
+}

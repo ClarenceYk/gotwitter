@@ -85,12 +85,12 @@ func TestFriendIDs(t *testing.T) {
 }
 
 func TestFriendsList(t *testing.T) {
-	app, _ := NewApplication(1)
+	app, _ := NewApplication(2)
 
 	param := &FriendsListParam{
 		ScreenName:          "MaYukkee",
-		Count:               10,
-		IncludeUserEntities: false,
+		Count:               2,
+		IncludeUserEntities: true,
 	}
 
 	fs, err := app.FriendsList(param)
@@ -100,5 +100,23 @@ func TestFriendsList(t *testing.T) {
 		for _, user := range fs.Users {
 			t.Log(user.ScreenName, user.Name)
 		}
+	}
+}
+
+func TestShowFriendship(t *testing.T) {
+	app, _ := NewApplication(2)
+
+	param := &ShowFriendshipParam{
+		SourceScreenName: "MaYukkee",
+		TargetID:         750713,
+	}
+
+	fs, err := app.ShowFriendship(param)
+
+	if err != nil {
+		t.Error(err)
+	} else {
+		t.Log("source: ", fs.Relationship.Source.Following, fs.Relationship.Source.FollowedBy)
+		t.Log("target: ", fs.Relationship.Target.Following, fs.Relationship.Target.FollowedBy)
 	}
 }

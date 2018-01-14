@@ -49,3 +49,11 @@ type FriendsListParam struct {
 	SkipStatus          bool   `url:"skip_status,omitempty"`
 	IncludeUserEntities bool   `url:"include_user_entities"`
 }
+
+// ShowFriendshipParam holds the paramters for showing a friendship bwtween two specified users.
+type ShowFriendshipParam struct {
+	SourceID         int64  `url:"source_id,omitempty"`
+	SourceScreenName string `url:"source_screen_name,omitempty"`
+	TargetID         int64  `url:"target_id,omitempty"`
+	TargetScreenName string `url:"target_screen_name,omitempty"`
+}

@@ -13,11 +13,12 @@ import (
 )
 
 const (
-	userTimelineBaseURL  = "https://api.twitter.com/1.1/statuses/user_timeline.json?"
-	followerIDsBaseURL   = "https://api.twitter.com/1.1/followers/ids.json?"
-	followersListBaseURL = "https://api.twitter.com/1.1/followers/list.json?"
-	friendIDsBaseURL     = "https://api.twitter.com/1.1/friends/ids.json?"
-	friendsListBaseURL   = "https://api.twitter.com/1.1/friends/list.json?"
+	userTimelineBaseURL   = "https://api.twitter.com/1.1/statuses/user_timeline.json"
+	followerIDsBaseURL    = "https://api.twitter.com/1.1/followers/ids.json"
+	followersListBaseURL  = "https://api.twitter.com/1.1/followers/list.json"
+	friendIDsBaseURL      = "https://api.twitter.com/1.1/friends/ids.json"
+	friendsListBaseURL    = "https://api.twitter.com/1.1/friends/list.json"
+	showFriendshipBaseURL = "https://api.twitter.com/1.1/friendships/show.json"
 )
 
 func (app *Application) userTimelineReq(param *UserTimelineParam) (*http.Request, error) {
@@ -40,13 +41,17 @@ func (app *Application) friendsListReq(param *FriendsListParam) (*http.Request, 
 	return app.getRequest(friendsListBaseURL, param)
 }
 
+func (app *Application) showFriendshipReq(param *ShowFriendshipParam) (*http.Request, error) {
+	return app.getRequest(showFriendshipBaseURL, param)
+}
+
 func (app *Application) getRequest(baseURL string, param interface{}) (*http.Request, error) {
 	v, err := query.Values(param)
 	if err != nil {
 		return nil, err
 	}
 
-	qstr := baseURL + v.Encode()
+	qstr := baseURL + "?" + v.Encode()
 	if app.debugLevel > 0 {
 		fmt.Printf("[DEBUG 1]getRequest() query <---> %s\n", qstr)
 	}
