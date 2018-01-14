@@ -5,15 +5,14 @@ import (
 )
 
 func TestNewApplication(t *testing.T) {
-	app, _ := NewApplication(0)
-	err := app.Authorize()
-	if err != nil {
-		t.Log(err)
-	}
+	app, _ := NewApplication(2)
+
 	param := &UserTimelineParam{
-		ScreenName: "MaYukkee",
-		Count:      8,
+		UserID: 933516360365121536,
+		// ScreenName: "MaYukkee",
+		Count: 10,
 	}
+
 	ts, err := app.UserTimeline(param)
 	if err != nil {
 		t.Log(err)
@@ -28,4 +27,17 @@ func TestNewApplication(t *testing.T) {
 			}
 		}
 	}
+
+	// param := &FollowerIDsParam{
+	// 	ScreenName:   "MaYukkee",
+	// 	Count:        3,
+	// 	StringifyIDs: true,
+	// }
+
+	// ids, err := app.FollowerIDs(param)
+	// if err != nil {
+	// 	t.Error(err)
+	// } else {
+	// 	t.Log(*ids)
+	// }
 }

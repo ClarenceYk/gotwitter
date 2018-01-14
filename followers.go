@@ -12,13 +12,16 @@ import (
 )
 
 const (
-	userTimelineBaseURL = "https://api.twitter.com/1.1/statuses/user_timeline.json?"
+	followerIDsBaseURL = "https://api.twitter.com/1.1/followers/ids.json?"
 )
 
-// UserTimeline fetch a timeline of a special user.
-// See more at https://developer.twitter.com/en/docs/tweets/timelines/api-reference/get-statuses-user_timeline
-func (app *Application) UserTimeline(param *UserTimelineParam) ([]*Tweet, error) {
-	req, err := app.userTimelineReq(param)
+// FollowerIDs retrieval follower ids.
+// See more at https://developer.twitter.com/en/docs/accounts-and-users/follow-search-get-users/api-reference/get-followers-ids
+func (app *Application) FollowerIDs(param *FollowerIDsParam) (*FollowerIDs, error) {
+	// NOTICE: stringify must be false
+	param.StringifyIDs = false
+
+	req, err := app.followerIDsReq(param)
 	if err != nil {
 		return nil, err
 	}
@@ -38,32 +41,32 @@ func (app *Application) UserTimeline(param *UserTimelineParam) ([]*Tweet, error)
 		return nil, err
 	}
 
-	ts := make([]*Tweet, 0)
+	ids := FollowerIDs{}
 	if app.debugLevel > 1 {
 		if buff, err := ioutil.ReadAll(gzipReader); err == nil {
-			fmt.Printf("[DEBUG 2]*Application.UserTimeline() buff <---> %s\n", string(buff))
-			if err := json.NewDecoder(bytes.NewBuffer(buff)).Decode(&ts); err != nil {
+			fmt.Printf("[DEBUG 2]*Application.FollowerIDs() buff <---> %s\n", string(buff))
+			if err := json.NewDecoder(bytes.NewBuffer(buff)).Decode(&ids); err != nil {
 				return nil, err
 			}
 		} else {
 			return nil, err
 		}
 	} else {
-		if err := json.NewDecoder(gzipReader).Decode(&ts); err != nil {
+		if err := json.NewDecoder(gzipReader).Decode(&ids); err != nil {
 			return nil, err
 		}
 	}
 
-	return ts, nil
+	return &ids, nil
 }
 
-func (app *Application) userTimelineReq(param *UserTimelineParam) (*http.Request, error) {
+func (app *Application) followerIDsReq(param *FollowerIDsParam) (*http.Request, error) {
 	v, err := query.Values(param)
 	if err != nil {
 		return nil, err
 	}
 
-	qstr := userTimelineBaseURL + v.Encode()
+	qstr := followerIDsBaseURL + v.Encode()
 	req, err := http.NewRequest("GET", qstr, nil)
 	if err != nil {
 		return nil, err

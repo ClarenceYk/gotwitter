@@ -3,9 +3,8 @@ package gotwitter
 // Tweet holds the information of a tweet.
 // See more at https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/tweet-object
 type Tweet struct {
+	ID
 	CreatedAt            string      `json:"created_at"`
-	ID                   int64       `json:"id"`
-	IDStr                string      `json:"id_str"`
 	Text                 string      `json:"text"`
 	Source               string      `json:"source"`
 	Truncated            bool        `json:"truncated"`
@@ -39,8 +38,7 @@ type Tweet struct {
 // User holds all the informations of a twitter user.
 // See more at https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/user-object
 type User struct {
-	ID                             int64       `json:"id"`
-	IDStr                          string      `json:"id_str"`
+	ID
 	Name                           string      `json:"name"`
 	ScreenName                     string      `json:"screen_name"`
 	Location                       string      `json:"location"`
@@ -97,10 +95,9 @@ type Hashtag struct {
 
 // Media holds the information of a media object.
 type Media struct {
+	ID
 	DisplayURL        string `json:"display_url"`
 	ExpandedURL       string `json:"expanded_url"`
-	ID                int64  `json:"id"`
-	IDStr             string `json:"id_str"`
 	Indices           [2]int `json:"indices"`
 	MediaURL          string `json:"media_url"`
 	MediaURLHttps     string `json:"media_url_https"`
@@ -142,8 +139,7 @@ type URL struct {
 
 // UserMention holds the information of metions in a tweet.
 type UserMention struct {
-	ID         int64  `json:"id"`
-	IDStr      string `json:"id_str"`
+	ID
 	Indices    [2]int `json:"indices"`
 	Name       string `json:"name"`
 	ScreenName string `json:"screen_name"`
@@ -189,4 +185,20 @@ type BoundingBox struct {
 type Coordinates struct {
 	Coordinates [2]float64 `json:"coordinates"`
 	Type        string     `json:"type"`
+}
+
+// FollowerIDs holds all the information of followers id of user.
+// See more at https://developer.twitter.com/en/docs/accounts-and-users/follow-search-get-users/api-reference/get-followers-ids
+type FollowerIDs struct {
+	IDs               []int64 `json:"ids"`
+	NextCursor        int64   `json:"next_cursor"`
+	NextCursorStr     string  `json:"next_cursor_str"`
+	PreviousCursor    int64   `json:"previous_cursor"`
+	PreviousCursorStr string  `json:"previous_cursor_str"`
+}
+
+// ID holds the information of resource's id.
+type ID struct {
+	ID    int64  `json:"id"`
+	IDStr string `json:"id_str"`
 }

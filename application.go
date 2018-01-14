@@ -1,7 +1,6 @@
 package gotwitter
 
 import (
-	"bufio"
 	"bytes"
 	"compress/gzip"
 	"encoding/base64"
@@ -10,7 +9,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
-	"os"
 	"strings"
 )
 
@@ -39,11 +37,13 @@ type Application struct {
 //   consumerKey=<your consumer key>
 //   consumerSecret=<your consumer screte>
 //   name=<your application name> /*optional*/
+//   token=<your authorized token> /*optional*/
 func NewApplication(debug int, params ...string) (*Application, error) {
 	var (
 		consumerKey    string
 		consumerSecret string
 		name           string
+		token          string
 	)
 
 	if len(params) == 2 {
@@ -59,14 +59,17 @@ func NewApplication(debug int, params ...string) (*Application, error) {
 			return nil, err
 		}
 
-		if cfg, ok := configs["consumerKey"]; ok {
-			consumerKey = cfg
-		}
-		if cfg, ok := configs["consumerSecret"]; ok {
-			consumerSecret = cfg
-		}
-		if cfg, ok := configs["name"]; ok {
-			name = cfg
+		for k, v := range configs {
+			switch k {
+			case "consumerKey":
+				consumerKey = v
+			case "consumerSecret":
+				consumerSecret = v
+			case "name":
+				name = v
+			case "token":
+				token = v
+			}
 		}
 	}
 
@@ -74,6 +77,7 @@ func NewApplication(debug int, params ...string) (*Application, error) {
 		ConsumerKey:    consumerKey,
 		ConsumerSecret: consumerSecret,
 		Name:           name,
+		BearerToken:    token,
 		debugLevel:     debug,
 		httpClient:     &http.Client{},
 	}, nil
@@ -186,40 +190,8 @@ func (app *Application) request() (*http.Request, error) {
 	if err != nil {
 		return nil, err
 	}
-	req.Header.Add("User-Agent", app.Name)
-	req.Header.Add("Authorization", "Basic "+app.tokenCredentials())
-	req.Header.Add("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8")
-	req.Header.Add("Accept-Encoding", "gzip")
+
+	addHeadersForAuthRequest(req, app)
 
 	return req, nil
-}
-
-func getConfig(debug int, filename string) (map[string]string, error) {
-	configs := make(map[string]string)
-
-	// Read content of .conf file
-	file, err := os.Open(filename)
-	if err != nil {
-		return nil, err
-	}
-	defer file.Close()
-
-	br := bufio.NewReader(file)
-	for {
-		line, err := br.ReadString('\n')
-		line = strings.Trim(line, "\n") // remove '\n'
-		if debug > 1 {
-			fmt.Printf("[DEBUG 2]NewApplication(): read line from .conf flie <---> %s\n", line)
-		}
-
-		if strings.Contains(line, "=") {
-			kv := strings.Split(line, "=")
-			configs[kv[0]] = kv[1]
-		}
-
-		if err != nil {
-			break
-		}
-	}
-	return configs, nil
 }
