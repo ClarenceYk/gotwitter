@@ -57,3 +57,10 @@ type ShowFriendshipParam struct {
 	TargetID         int64  `url:"target_id,omitempty"`
 	TargetScreenName string `url:"target_screen_name,omitempty"`
 }
+
+// UsersLookup holds the paramters for retrieving users.
+type UsersLookupParam struct {
+	UserID              []int64  `url:"user_id,comma,omitempty"`
+	ScreenName          []string `url:"screen_name,comma,omitempty"`
+	IncludeUserEntities bool     `url:"include_user_entities"`
+}

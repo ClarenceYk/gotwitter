@@ -5,7 +5,7 @@ import (
 )
 
 func TestUserTimeline(t *testing.T) {
-	app, _ := NewApplication(2)
+	app, _ := NewApplication(0)
 
 	param := &UserTimelineParam{
 		UserID: 750713,
@@ -31,7 +31,7 @@ func TestUserTimeline(t *testing.T) {
 }
 
 func TestFollowerIDs(t *testing.T) {
-	app, _ := NewApplication(2)
+	app, _ := NewApplication(0)
 
 	param := &FollowerIDsParam{
 		ScreenName:   "MaYukkee",
@@ -48,7 +48,7 @@ func TestFollowerIDs(t *testing.T) {
 }
 
 func TestFollowersList(t *testing.T) {
-	app, _ := NewApplication(2)
+	app, _ := NewApplication(0)
 
 	param := &FollowersListParam{
 		ScreenName:          "MaYukkee",
@@ -85,7 +85,7 @@ func TestFriendIDs(t *testing.T) {
 }
 
 func TestFriendsList(t *testing.T) {
-	app, _ := NewApplication(2)
+	app, _ := NewApplication(0)
 
 	param := &FriendsListParam{
 		ScreenName:          "MaYukkee",
@@ -104,7 +104,7 @@ func TestFriendsList(t *testing.T) {
 }
 
 func TestShowFriendship(t *testing.T) {
-	app, _ := NewApplication(2)
+	app, _ := NewApplication(0)
 
 	param := &ShowFriendshipParam{
 		SourceScreenName: "MaYukkee",
@@ -118,5 +118,24 @@ func TestShowFriendship(t *testing.T) {
 	} else {
 		t.Log("source: ", fs.Relationship.Source.Following, fs.Relationship.Source.FollowedBy)
 		t.Log("target: ", fs.Relationship.Target.Following, fs.Relationship.Target.FollowedBy)
+	}
+}
+
+func TestUsersLookup(t *testing.T) {
+	app, _ := NewApplication(2)
+
+	param := &UsersLookupParam{
+		UserID:              []int64{177547360, 248806976, 90183678},
+		IncludeUserEntities: true,
+	}
+
+	users, err := app.UsersLookup(param)
+
+	if err != nil {
+		t.Error(err)
+	} else {
+		for _, user := range users {
+			t.Log(user.ScreenName, user.Status.CreatedAt)
+		}
 	}
 }

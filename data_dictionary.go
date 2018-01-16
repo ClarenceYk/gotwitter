@@ -4,35 +4,35 @@ package gotwitter
 // See more at https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/tweet-object
 type Tweet struct {
 	ID
-	CreatedAt            string      `json:"created_at"`
-	Text                 string      `json:"text"`
-	Source               string      `json:"source"`
-	Truncated            bool        `json:"truncated"`
-	InReplyToStatusID    int64       `json:"in_reply_to_status_id"`
-	InReplyToStatusIDStr string      `json:"in_reply_to_status_id_str"`
-	InReplyToUserID      int64       `json:"in_reply_to_user_id"`
-	InReplyToUserIDStr   string      `json:"in_reply_to_user_id_str"`
-	InReplyToScreenName  string      `json:"in_reply_to_screen_name"`
-	User                 User        `json:"user"`
-	Coordinates          Coordinates `json:"coordinates"`
-	Place                Places      `json:"place"`
-	QuotedStatusID       int64       `json:"quoted_status_id"`
-	QuotedStatusIDStr    string      `json:"quoted_status_id_str"`
-	IsQuoteStatus        bool        `json:"is_quote_status"`
-	QuotedStatus         *Tweet      `json:"quoted_status"`
-	RetweetedStatus      *Tweet      `json:"retweeted_status"`
-	QuoteCount           int         `json:"quote_count"`
-	ReplyCount           int         `json:"reply_count"`
-	RetweetCount         int         `json:"retweet_count"`
-	FavoriteCount        int         `json:"favorite_count"`
-	Entities             Entities    `json:"entities"`
-	ExtendedEntities     interface{} `json:"extended_entities"`
-	Favorited            bool        `json:"favorited"`
-	Retweeted            bool        `json:"retweeted"`
-	PossiblySensitive    bool        `json:"possibly_sensitive"`
-	FilterLevel          string      `json:"filter_level"`
-	Lang                 string      `json:"lang"`
-	MatchingRules        interface{} `json:"matching_rules"`
+	CreatedAt            string       `json:"created_at"`
+	Text                 string       `json:"text"`
+	Source               string       `json:"source"`
+	Truncated            bool         `json:"truncated"`
+	InReplyToStatusID    int64        `json:"in_reply_to_status_id"`
+	InReplyToStatusIDStr string       `json:"in_reply_to_status_id_str"`
+	InReplyToUserID      int64        `json:"in_reply_to_user_id"`
+	InReplyToUserIDStr   string       `json:"in_reply_to_user_id_str"`
+	InReplyToScreenName  string       `json:"in_reply_to_screen_name"`
+	User                 *User        `json:"user"`
+	Coordinates          *Coordinates `json:"coordinates"`
+	Place                Places       `json:"place"`
+	QuotedStatusID       int64        `json:"quoted_status_id"`
+	QuotedStatusIDStr    string       `json:"quoted_status_id_str"`
+	IsQuoteStatus        bool         `json:"is_quote_status"`
+	QuotedStatus         *Tweet       `json:"quoted_status"`
+	RetweetedStatus      *Tweet       `json:"retweeted_status"`
+	QuoteCount           int          `json:"quote_count"`
+	ReplyCount           int          `json:"reply_count"`
+	RetweetCount         int          `json:"retweet_count"`
+	FavoriteCount        int          `json:"favorite_count"`
+	Entities             *Entities    `json:"entities"`
+	ExtendedEntities     interface{}  `json:"extended_entities"`
+	Favorited            bool         `json:"favorited"`
+	Retweeted            bool         `json:"retweeted"`
+	PossiblySensitive    bool         `json:"possibly_sensitive"`
+	FilterLevel          string       `json:"filter_level"`
+	Lang                 string       `json:"lang"`
+	MatchingRules        interface{}  `json:"matching_rules"`
 }
 
 // User holds all the informations of a twitter user.
@@ -79,12 +79,12 @@ type User struct {
 // Entities holds the information of entities in a tweet.
 // See more at https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/entities-object
 type Entities struct {
-	Hashtags     []Hashtag     `json:"hashtag"`
-	Media        []Media       `json:"media"`
-	URLs         []URL         `json:"urls"`
-	UserMentions []UserMention `json:"user_mentions"`
-	Symbols      []Symbol      `json:"symbols"`
-	Polls        []Poll        `json:"polls"`
+	Hashtags     []*Hashtag     `json:"hashtag"`
+	Media        []*Media       `json:"media"`
+	URLs         []*URL         `json:"urls"`
+	UserMentions []*UserMention `json:"user_mentions"`
+	Symbols      []*Symbol      `json:"symbols"`
+	Polls        []*Poll        `json:"polls"`
 }
 
 // Hashtag holds the information of hashtag in a tweet.
@@ -101,7 +101,7 @@ type Media struct {
 	Indices           [2]int `json:"indices"`
 	MediaURL          string `json:"media_url"`
 	MediaURLHttps     string `json:"media_url_https"`
-	Sizes             Sizes  `json:"sizes"`
+	Sizes             *Sizes `json:"sizes"`
 	SourceStatusID    int64  `json:"source_status_id"`
 	SourceStatusIDStr string `json:"source_status_id_str"`
 	Type              string `json:"type"`
@@ -110,10 +110,10 @@ type Media struct {
 
 // Sizes holds the information of four type media sizes.
 type Sizes struct {
-	Thumb  Size `json:"thumb"`
-	Large  Size `json:"large"`
-	Medium Size `json:"medium"`
-	Small  Size `json:"small"`
+	Thumb  *Size `json:"thumb"`
+	Large  *Size `json:"large"`
+	Medium *Size `json:"medium"`
+	Small  *Size `json:"small"`
 }
 
 // Size hold the information of a media size.
@@ -164,15 +164,15 @@ type Poll struct {
 // Places holds the information of a place.
 // See more at https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/geo-objects#coordinates-dictionary
 type Places struct {
-	ID          string      `json:"id"`
-	URL         string      `json:"url"`
-	PlaceType   string      `json:"place_type"`
-	Name        string      `json:"name"`
-	FullName    string      `json:"full_name"`
-	CounryCode  string      `json:"country_code"`
-	Country     string      `json:"country"`
-	BoundingBox BoundingBox `json:"bounding_box"`
-	Attributes  interface{} `json:"attributes"`
+	ID          string       `json:"id"`
+	URL         string       `json:"url"`
+	PlaceType   string       `json:"place_type"`
+	Name        string       `json:"name"`
+	FullName    string       `json:"full_name"`
+	CounryCode  string       `json:"country_code"`
+	Country     string       `json:"country"`
+	BoundingBox *BoundingBox `json:"bounding_box"`
+	Attributes  interface{}  `json:"attributes"`
 }
 
 // BoundingBox holds the information of area.
@@ -263,4 +263,67 @@ type Source struct {
 	Following            bool   `json:"following"`
 	FollowedBy           bool   `json:"followed_by"`
 	NotificationsEnabled bool   `json:"notifications_enabled"`
+}
+
+// Users hold the information of twitter users.
+// See more at https://developer.twitter.com/en/docs/accounts-and-users/follow-search-get-users/api-reference/get-users-lookup
+type UserLookup struct {
+	Name                           string `json:"name"`
+	ProfileSidebarFillColor        string `json:"profile_sidebar_fill_color"`
+	ProfileBackgroundTile          bool   `json:"profile_background_tile"`
+	ProfileSidebarBorderColor      string `json:"profile_sidebar_border_color"`
+	ProfileImageURL                string `json:"profile_image_url"`
+	Location                       string `json:"location"`
+	CreatedAt                      string `json:"created_at"`
+	FollowRequestSent              bool   `json:"follow_request_sent"`
+	IDStr                          string `json:"id_str"`
+	ProfileLinkColor               string `json:"profile_link_color"`
+	IsTranslator                   bool   `json:"is_translator"`
+	DefaultProfile                 bool   `json:"default_profile"`
+	FavouritesCount                int    `json:"favourites_count"`
+	ContributorsEnabled            bool   `json:"contributors_enabled"`
+	URL                            string `json:"url"`
+	ProfileImageURLHTTPS           string `json:"profile_image_url_https"`
+	UtcOffset                      int    `json:"utc_offset"`
+	ID                             int    `json:"id"`
+	ProfileUseBackgroundImage      bool   `json:"profile_use_background_image"`
+	ListedCount                    int    `json:"listed_count"`
+	ProfileTextColor               string `json:"profile_text_color"`
+	Lang                           string `json:"lang"`
+	FollowersCount                 int    `json:"followers_count"`
+	Protected                      bool   `json:"protected"`
+	ProfileBackgroundImageURLHTTPS string `json:"profile_background_image_url_https"`
+	GeoEnabled                     bool   `json:"geo_enabled"`
+	Description                    string `json:"description"`
+	ProfileBackgroundColor         string `json:"profile_background_color"`
+	Verified                       bool   `json:"verified"`
+	Notifications                  bool   `json:"notifications"`
+	TimeZone                       string `json:"time_zone"`
+	StatusesCount                  int    `json:"statuses_count"`
+	Status                         struct {
+		Coordinates          *Coordinates `json:"coordinates"`
+		CreatedAt            string       `json:"created_at"`
+		Favorited            bool         `json:"favorited"`
+		Truncated            bool         `json:"truncated"`
+		IDStr                string       `json:"id_str"`
+		InReplyToUserIDStr   string       `json:"in_reply_to_user_id_str"`
+		Text                 string       `json:"text"`
+		Contributors         interface{}  `json:"contributors"`
+		RetweetCount         int          `json:"retweet_count"`
+		ID                   int64        `json:"id"`
+		InReplyToStatusIDStr string       `json:"in_reply_to_status_id_str"`
+		Geo                  interface{}  `json:"geo"`
+		Retweeted            bool         `json:"retweeted"`
+		InReplyToUserID      int          `json:"in_reply_to_user_id"`
+		Place                *Places      `json:"place"`
+		Source               string       `json:"source"`
+		InReplyToScreenName  string       `json:"in_reply_to_screen_name"`
+		InReplyToStatusID    int64        `json:"in_reply_to_status_id"`
+	} `json:"status"`
+	ProfileBackgroundImageURL string `json:"profile_background_image_url"`
+	DefaultProfileImage       bool   `json:"default_profile_image"`
+	FriendsCount              int    `json:"friends_count"`
+	ScreenName                string `json:"screen_name"`
+	Following                 bool   `json:"following"`
+	ShowAllInlineMedia        bool   `json:"show_all_inline_media"`
 }

@@ -12,39 +12,6 @@ import (
 	"github.com/google/go-querystring/query"
 )
 
-const (
-	userTimelineBaseURL   = "https://api.twitter.com/1.1/statuses/user_timeline.json"
-	followerIDsBaseURL    = "https://api.twitter.com/1.1/followers/ids.json"
-	followersListBaseURL  = "https://api.twitter.com/1.1/followers/list.json"
-	friendIDsBaseURL      = "https://api.twitter.com/1.1/friends/ids.json"
-	friendsListBaseURL    = "https://api.twitter.com/1.1/friends/list.json"
-	showFriendshipBaseURL = "https://api.twitter.com/1.1/friendships/show.json"
-)
-
-func (app *Application) userTimelineReq(param *UserTimelineParam) (*http.Request, error) {
-	return app.getRequest(userTimelineBaseURL, param)
-}
-
-func (app *Application) followerIDsReq(param *FollowerIDsParam) (*http.Request, error) {
-	return app.getRequest(followerIDsBaseURL, param)
-}
-
-func (app *Application) followersListReq(param *FollowersListParam) (*http.Request, error) {
-	return app.getRequest(followersListBaseURL, param)
-}
-
-func (app *Application) friendIDsReq(param *FriendIDsParam) (*http.Request, error) {
-	return app.getRequest(friendIDsBaseURL, param)
-}
-
-func (app *Application) friendsListReq(param *FriendsListParam) (*http.Request, error) {
-	return app.getRequest(friendsListBaseURL, param)
-}
-
-func (app *Application) showFriendshipReq(param *ShowFriendshipParam) (*http.Request, error) {
-	return app.getRequest(showFriendshipBaseURL, param)
-}
-
 func (app *Application) getRequest(baseURL string, param interface{}) (*http.Request, error) {
 	v, err := query.Values(param)
 	if err != nil {
@@ -66,32 +33,38 @@ func (app *Application) getRequest(baseURL string, param interface{}) (*http.Req
 	return req, nil
 }
 
-func (app *Application) doRequest(req *http.Request) (io.ReadCloser, error) {
+func (app *Application) doRequest(req *http.Request, result interface{}) error {
 	resp, err := app.httpClient.Do(req)
 	if err != nil {
-		return nil, err
+		return err
 	}
+	defer resp.Body.Close()
 
 	if resp.StatusCode != 200 {
-		return nil, app.requestError(resp)
+		return app.requestError(resp)
 	}
 
 	gzipReader, err := gzip.NewReader(resp.Body)
 	if err != nil {
-		resp.Body.Close()
-		return nil, err
+		return err
 	}
 
+	var reader io.Reader
 	if app.debugLevel > 1 {
-		return debugReadCloser{gzipReader, resp.Body}, nil
+		reader = debugReader{gzipReader}
+	} else {
+		reader = normalReader{gzipReader}
 	}
 
-	return normalReadCloser{gzipReader, resp.Body}, nil
+	if err := json.NewDecoder(reader).Decode(result); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // requestError handle the unexpected status.
 func (app *Application) requestError(resp *http.Response) error {
-	defer resp.Body.Close()
 	errors := struct {
 		Errs []struct {
 			Code    int    `json:"code"`

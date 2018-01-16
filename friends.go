@@ -1,50 +1,48 @@
 package gotwitter
 
-import "encoding/json"
+import "net/http"
 
 // FriendIDs retrieve friend ids.
 // See more at https://developer.twitter.com/en/docs/accounts-and-users/follow-search-get-users/api-reference/get-friends-ids
-func (app *Application) FriendIDs(param *FriendIDsParam) (*FriendIDs, error) {
+func (app *Application) FriendIDs(param *FriendIDsParam) (ids *FriendIDs, err error) {
 	// NOTICE: stringify must be false
 	param.StringifyIDs = false
 
 	req, err := app.friendIDsReq(param)
 	if err != nil {
-		return nil, err
+		return
 	}
 
-	grc, err := app.doRequest(req)
-	if err != nil {
-		return nil, err
-	}
-	defer grc.Close()
+	ids = &FriendIDs{}
+	err = app.doRequest(req, ids)
 
-	ids := FriendIDs{}
-	if err := json.NewDecoder(grc).Decode(&ids); err != nil {
-		return nil, err
-	}
+	return
+}
 
-	return &ids, nil
+func (app *Application) friendIDsReq(param *FriendIDsParam) (*http.Request, error) {
+	return app.getRequest(
+		"https://api.twitter.com/1.1/friends/ids.json",
+		param,
+	)
 }
 
 // FriendsList retrieve a friends list of a specified user.
 // See more at https://developer.twitter.com/en/docs/accounts-and-users/follow-search-get-users/api-reference/get-friends-list
-func (app *Application) FriendsList(param *FriendsListParam) (*FriendsList, error) {
+func (app *Application) FriendsList(param *FriendsListParam) (list *FriendsList, err error) {
 	req, err := app.friendsListReq(param)
 	if err != nil {
-		return nil, err
+		return
 	}
 
-	grc, err := app.doRequest(req)
-	if err != nil {
-		return nil, err
-	}
-	defer grc.Close()
+	list = &FriendsList{}
+	err = app.doRequest(req, list)
 
-	ids := FriendsList{}
-	if err := json.NewDecoder(grc).Decode(&ids); err != nil {
-		return nil, err
-	}
+	return
+}
 
-	return &ids, nil
+func (app *Application) friendsListReq(param *FriendsListParam) (*http.Request, error) {
+	return app.getRequest(
+		"https://api.twitter.com/1.1/friends/list.json",
+		param,
+	)
 }

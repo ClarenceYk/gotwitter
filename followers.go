@@ -1,52 +1,48 @@
 package gotwitter
 
-import (
-	"encoding/json"
-)
+import "net/http"
 
 // FollowerIDs retrieve follower ids.
 // See more at https://developer.twitter.com/en/docs/accounts-and-users/follow-search-get-users/api-reference/get-followers-ids
-func (app *Application) FollowerIDs(param *FollowerIDsParam) (*FollowerIDs, error) {
+func (app *Application) FollowerIDs(param *FollowerIDsParam) (ids *FollowerIDs, err error) {
 	// NOTICE: stringify must be false
 	param.StringifyIDs = false
 
 	req, err := app.followerIDsReq(param)
 	if err != nil {
-		return nil, err
+		return
 	}
 
-	grc, err := app.doRequest(req)
-	if err != nil {
-		return nil, err
-	}
-	defer grc.Close()
+	ids = &FollowerIDs{}
+	err = app.doRequest(req, ids)
 
-	ids := FollowerIDs{}
-	if err := json.NewDecoder(grc).Decode(&ids); err != nil {
-		return nil, err
-	}
+	return
+}
 
-	return &ids, nil
+func (app *Application) followerIDsReq(param *FollowerIDsParam) (*http.Request, error) {
+	return app.getRequest(
+		"https://api.twitter.com/1.1/followers/ids.json",
+		param,
+	)
 }
 
 // FollowersList retrieve a cursored collection of user objects for users following the specified user.
 // See more at https://developer.twitter.com/en/docs/accounts-and-users/follow-search-get-users/api-reference/get-followers-list
-func (app *Application) FollowersList(param *FollowersListParam) (*FollowersList, error) {
+func (app *Application) FollowersList(param *FollowersListParam) (list *FollowersList, err error) {
 	req, err := app.followersListReq(param)
 	if err != nil {
-		return nil, err
+		return
 	}
 
-	grc, err := app.doRequest(req)
-	if err != nil {
-		return nil, err
-	}
-	defer grc.Close()
+	list = &FollowersList{}
+	err = app.doRequest(req, list)
 
-	list := FollowersList{}
-	if err := json.NewDecoder(grc).Decode(&list); err != nil {
-		return nil, err
-	}
+	return
+}
 
-	return &list, nil
+func (app *Application) followersListReq(param *FollowersListParam) (*http.Request, error) {
+	return app.getRequest(
+		"https://api.twitter.com/1.1/followers/list.json",
+		param,
+	)
 }

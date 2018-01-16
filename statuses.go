@@ -1,27 +1,24 @@
 package gotwitter
 
-import (
-	"encoding/json"
-)
+import "net/http"
 
 // UserTimeline fetch a timeline of a special user.
 // See more at https://developer.twitter.com/en/docs/tweets/timelines/api-reference/get-statuses-user_timeline
-func (app *Application) UserTimeline(param *UserTimelineParam) ([]*Tweet, error) {
+func (app *Application) UserTimeline(param *UserTimelineParam) (ts []*Tweet, err error) {
 	req, err := app.userTimelineReq(param)
 	if err != nil {
-		return nil, err
+		return
 	}
 
-	grc, err := app.doRequest(req)
-	if err != nil {
-		return nil, err
-	}
-	defer grc.Close()
+	ts = make([]*Tweet, 0)
+	err = app.doRequest(req, &ts)
 
-	ts := make([]*Tweet, 0)
-	if err := json.NewDecoder(grc).Decode(&ts); err != nil {
-		return nil, err
-	}
+	return
+}
 
-	return ts, nil
+func (app *Application) userTimelineReq(param *UserTimelineParam) (*http.Request, error) {
+	return app.getRequest(
+		"https://api.twitter.com/1.1/statuses/user_timeline.json",
+		param,
+	)
 }

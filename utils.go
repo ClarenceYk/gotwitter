@@ -55,12 +55,11 @@ func addHeadersForAllRequest(req *http.Request, appName string) {
 	req.Header.Add("Accept-Encoding", "gzip")
 }
 
-type debugReadCloser struct {
+type debugReader struct {
 	r io.Reader
-	c io.Closer
 }
 
-func (drc debugReadCloser) Read(buff []byte) (int, error) {
+func (drc debugReader) Read(buff []byte) (int, error) {
 	n, err := drc.r.Read(buff)
 	if err != nil {
 		return n, err
@@ -69,23 +68,14 @@ func (drc debugReadCloser) Read(buff []byte) (int, error) {
 	return n, nil
 }
 
-func (drc debugReadCloser) Close() error {
-	return drc.c.Close()
-}
-
-type normalReadCloser struct {
+type normalReader struct {
 	r io.Reader
-	c io.Closer
 }
 
-func (nrc normalReadCloser) Read(buff []byte) (int, error) {
+func (nrc normalReader) Read(buff []byte) (int, error) {
 	n, err := nrc.r.Read(buff)
 	if err != nil {
 		return n, err
 	}
 	return n, nil
-}
-
-func (nrc normalReadCloser) Close() error {
-	return nrc.c.Close()
 }
