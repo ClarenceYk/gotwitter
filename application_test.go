@@ -125,8 +125,8 @@ func TestUsersLookup(t *testing.T) {
 	app, _ := NewApplication(2)
 
 	param := &UsersLookupParam{
-		UserID:              []int64{177547360, 248806976, 90183678},
-		IncludeUserEntities: true,
+		UserID:          []int64{177547360, 248806976, 90183678},
+		IncludeEntities: true,
 	}
 
 	users, err := app.UsersLookup(param)
@@ -135,7 +135,25 @@ func TestUsersLookup(t *testing.T) {
 		t.Error(err)
 	} else {
 		for _, user := range users {
-			t.Log(user.ScreenName, user.Status.CreatedAt)
+			t.Log(user.ScreenName, user.Status.CreatedAt, *user.Status.Entities)
 		}
+	}
+}
+
+func TestShowUser(t *testing.T) {
+	app, _ := NewApplication(2)
+
+	param := &UserShowParam{
+		UserID:          248806976,
+		ScreenName:      "MortyCrypto",
+		IncludeEntities: true,
+	}
+
+	user, err := app.ShowUser(param)
+
+	if err != nil {
+		t.Error(err)
+	} else {
+		t.Log(user.ScreenName, user.Status.CreatedAt, *user.Status.Entities)
 	}
 }
