@@ -71,3 +71,17 @@ type UserShowParam struct {
 	ScreenName      string `url:"screen_name,omitempty"`
 	IncludeEntities bool   `url:"include_entities"`
 }
+
+// UserSuggestionsParam holds the paramters for retrieving suggestions.
+type UserSuggestionsParam struct {
+	Lang    string `url:"lang,omitempty"`
+	Slug    string `url:"slug,omitempty"`
+	Members bool   `url:"-"`
+}
+
+// GetListsParam holds the paramters for retrieving lists.
+type GetListsParam struct {
+	UserID     int64  `url:"user_id,omitempty"`
+	ScreenName string `url:"screen_name,omitempty"`
+	Reverse    bool   `json:"reverse,omitempty"`
+}

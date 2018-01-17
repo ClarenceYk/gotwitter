@@ -18,7 +18,11 @@ func (app *Application) getRequest(baseURL string, param interface{}) (*http.Req
 		return nil, err
 	}
 
-	qstr := baseURL + "?" + v.Encode()
+	urlParamStr := v.Encode()
+	if urlParamStr != "" {
+		urlParamStr = "?" + urlParamStr
+	}
+	qstr := baseURL + urlParamStr
 	if app.debugLevel > 0 {
 		fmt.Printf("[DEBUG 1]getRequest() query <---> %s\n", qstr)
 	}

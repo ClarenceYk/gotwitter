@@ -15,7 +15,7 @@ func TestUserTimeline(t *testing.T) {
 
 	ts, err := app.UserTimeline(param)
 	if err != nil {
-		t.Log(err)
+		t.Error(err)
 	} else {
 		for _, tweet := range ts {
 			t.Log(tweet.Text)
@@ -155,5 +155,77 @@ func TestShowUser(t *testing.T) {
 		t.Error(err)
 	} else {
 		t.Log(user.ScreenName, user.Status.CreatedAt, *user.Status.Entities)
+	}
+}
+
+func TestUserSuggestions(t *testing.T) {
+	app, _ := NewApplication(2)
+
+	param := &UserSuggestionsParam{}
+
+	sugs, err := app.UserSuggestions(param)
+
+	if err != nil {
+		t.Error(err)
+	} else {
+		for _, sug := range sugs {
+			t.Log(*sug)
+		}
+	}
+}
+
+func TestUserSuggestionsWithSlug(t *testing.T) {
+	app, _ := NewApplication(2)
+
+	param := &UserSuggestionsParam{
+		Slug: "news",
+	}
+
+	users, err := app.UserSuggestionsWithSlug(param)
+
+	if err != nil {
+		t.Error(err)
+	} else {
+		t.Log(users.Name)
+		for _, user := range users.Users {
+			t.Log(user.ScreenName, user.CreatedAt, user.Entities.URL.Urls)
+		}
+	}
+}
+
+func TestUserSuggestionsWithSlugAndMembers(t *testing.T) {
+	app, _ := NewApplication(2)
+
+	param := &UserSuggestionsParam{
+		Slug:    "funny",
+		Members: true,
+	}
+
+	users, err := app.UserSuggestionsWithSlugAndMembers(param)
+
+	if err != nil {
+		t.Error(err)
+	} else {
+		for _, user := range users {
+			t.Log(user.ScreenName, user.IDStr, user.Status.Text)
+		}
+	}
+}
+
+func TestGetList(t *testing.T) {
+	app, _ := NewApplication(2)
+
+	param := &GetListsParam{
+		UserID: 148781366,
+	}
+
+	lists, err := app.GetLists(param)
+
+	if err != nil {
+		t.Error(err)
+	} else {
+		for _, list := range lists {
+			t.Log(list.FullName, list.CreatedAt, list.MemberCount, list.SubscriberCount, *list.User)
+		}
 	}
 }

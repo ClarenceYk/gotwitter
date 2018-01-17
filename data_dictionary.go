@@ -288,9 +288,9 @@ type Status struct {
 	InReplyToStatusID    int64        `json:"in_reply_to_status_id"`
 }
 
-// UserLookup hold the information of twitter users.
+// UserWithStatus hold the information of twitter users.
 // See more at https://developer.twitter.com/en/docs/accounts-and-users/follow-search-get-users/api-reference/get-users-lookup
-type UserLookup struct {
+type UserWithStatus struct {
 	Name                           string  `json:"name"`
 	ProfileSidebarFillColor        string  `json:"profile_sidebar_fill_color"`
 	ProfileBackgroundTile          bool    `json:"profile_background_tile"`
@@ -378,4 +378,52 @@ type UserShow struct {
 	FollowRequestSent              bool        `json:"follow_request_sent"`
 	Notifications                  bool        `json:"notifications"`
 	TranslatorType                 string      `json:"translator_type"`
+}
+
+// UserWithEntities for user with entities.
+type UserWithEntities struct {
+	User
+	Entities struct {
+		URL struct {
+			Urls []struct {
+				URL         string `json:"url"`
+				ExpandedURL string `json:"expanded_url"`
+				DisplayURL  string `json:"display_url"`
+				Indices     []int  `json:"indices"`
+			} `json:"urls"`
+		} `json:"url"`
+		Description struct {
+			Urls []interface{} `json:"urls"`
+		} `json:"description"`
+	} `json:"entities"`
+}
+
+// Suggestion for user.
+type Suggestion struct {
+	Name string `json:"name"`
+	Slug string `json:"slug"`
+	Size int    `json:"size"`
+}
+
+// SuggestionUsers holds the informations of suggested users.
+type SuggestionUsers struct {
+	Suggestion
+	Users []*UserWithEntities `json:"users"`
+}
+
+// List holds the informations of a twitter list.
+type List struct {
+	Slug            string `json:"slug"`
+	Name            string `json:"name"`
+	CreatedAt       string `json:"created_at"`
+	URI             string `json:"uri"`
+	SubscriberCount int    `json:"subscriber_count"`
+	IDStr           string `json:"id_str"`
+	MemberCount     int    `json:"member_count"`
+	Mode            string `json:"mode"`
+	ID              int    `json:"id"`
+	FullName        string `json:"full_name"`
+	Description     string `json:"description"`
+	Following       bool   `json:"following"`
+	User            *User  `json:"user"`
 }
