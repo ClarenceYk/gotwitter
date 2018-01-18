@@ -83,5 +83,53 @@ type UserSuggestionsParam struct {
 type GetListsParam struct {
 	UserID     int64  `url:"user_id,omitempty"`
 	ScreenName string `url:"screen_name,omitempty"`
-	Reverse    bool   `json:"reverse,omitempty"`
+	Reverse    bool   `url:"reverse,omitempty"`
+}
+
+// ListsCreateParam holds the parameters for creating a new list.
+type ListsCreateParam struct {
+	Name        string `url:"name"`
+	Mode        string `url:"mode,omitempty"`
+	Description string `url:"description,omitempty"`
+}
+
+// ListMembersParam holds the parameters for retrieving members in a list.
+type ListMembersParam struct {
+	ListID          int64  `url:"list_id,omitempty"`
+	Slug            string `url:"slug,omitempty"`
+	OwnerScreenName string `url:"owner_screen_name,omitempty"`
+	OwnerID         int64  `url:"owner_id,omitempty"`
+	Count           int    `url:"count,omitempty"`
+	Cursor          int    `url:"cursor,omitempty"`
+	IncludeEntities bool   `url:"include_entities,omitempty"`
+	SkipStatus      bool   `url:"skip_status,omitempty"`
+}
+
+//ListMembersShowParam holds the parameters for showing whether a user is in a specified list.
+type ListMembersShowParam struct {
+	ListID          int64  `url:"list_id,omitempty"`
+	Slug            string `url:"slug,omitempty"`
+	UserID          int64  `url:"user_id,omitempty"`
+	ScreenName      string `url:"screen_name,omitempty"`
+	OwnerScreenName string `url:"owner_screen_name,omitempty"`
+	OwnerID         int64  `url:"owner_id,omitempty"`
+	IncludeEntities bool   `url:"include_entities,omitempty"`
+	SkipStatus      bool   `url:"skip_status,omitempty"`
+}
+
+//ListsMembershipsParam holds the parameters for retrieving lists the specified user has been added to.
+type ListsMembershipsParam struct {
+	UserID             int64  `url:"user_id,omitempty"`
+	ScreenName         string `url:"screen_name,omitempty"`
+	Count              int    `url:"count,omitempty"`
+	Cursor             int    `url:"cursor,omitempty"`
+	FilterToOwnedLists bool   `url:"filter_to_owned_lists,omitempty"`
+}
+
+// ListsOwnershipsParam holds the parameters for retrieving lists owned by a specified user.
+type ListsOwnershipsParam struct {
+	UserID     int64  `url:"user_id,omitempty"`
+	ScreenName string `url:"screen_name,omitempty"`
+	Count      int    `url:"count,omitempty"`
+	Cursor     int    `url:"cursor,omitempty"`
 }

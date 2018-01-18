@@ -20,6 +20,7 @@ func (app *Application) UsersLookup(param *UsersLookupParam) (users []*UserWithS
 
 func (app *Application) usersLookupReq(param *UsersLookupParam) (*http.Request, error) {
 	return app.getRequest(
+		"GET",
 		"https://api.twitter.com/1.1/users/lookup.json",
 		param,
 	)
@@ -41,6 +42,7 @@ func (app *Application) ShowUser(param *UserShowParam) (user *UserShow, err erro
 
 func (app *Application) userShowParam(param *UserShowParam) (*http.Request, error) {
 	return app.getRequest(
+		"GET",
 		"https://api.twitter.com/1.1/users/show.json",
 		param,
 	)
@@ -104,6 +106,7 @@ func (app *Application) userSuggestionsParam(param *UserSuggestionsParam) (*http
 		baseURL = baseURL + ".json"
 	}
 	return app.getRequest(
+		"GET",
 		baseURL,
 		param,
 	)

@@ -18,6 +18,7 @@ func (app *Application) UserTimeline(param *UserTimelineParam) (ts []*Tweet, err
 
 func (app *Application) userTimelineReq(param *UserTimelineParam) (*http.Request, error) {
 	return app.getRequest(
+		"GET",
 		"https://api.twitter.com/1.1/statuses/user_timeline.json",
 		param,
 	)

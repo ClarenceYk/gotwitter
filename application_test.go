@@ -229,3 +229,74 @@ func TestGetList(t *testing.T) {
 		}
 	}
 }
+
+func TestListsCreate(t *testing.T) {
+	app, _ := NewApplication(2)
+
+	param := &ListsCreateParam{
+		Name: "TESTLIST",
+	}
+
+	list, err := app.ListsCreate(param)
+
+	if err != nil {
+		t.Error(err)
+	} else {
+		t.Log(list.FullName, list.CreatedAt, list.MemberCount, list.SubscriberCount, *list.User)
+	}
+}
+
+func TestListMembers(t *testing.T) {
+	app, _ := NewApplication(2)
+
+	param := &ListMembersParam{
+		Slug:            "6",
+		OwnerScreenName: "taofoufoufou",
+	}
+
+	list, err := app.ListMembers(param)
+
+	if err != nil {
+		t.Error(err)
+	} else {
+		for _, user := range list.Users {
+			t.Log(user.ScreenName, user.CreatedAt)
+		}
+	}
+}
+
+func TestListMemberships(t *testing.T) {
+	app, _ := NewApplication(2)
+
+	param := &ListsMembershipsParam{
+		ScreenName: "MaYukkee",
+	}
+
+	list, err := app.ListsMemberships(param)
+
+	if err != nil {
+		t.Error(err)
+	} else {
+		for _, l := range list.Lists {
+			t.Log(l.Name, l.FullName, l.Description, l.Slug)
+		}
+	}
+}
+
+func TestListsOwnerships(t *testing.T) {
+	app, _ := NewApplication(2)
+
+	param := &ListsOwnershipsParam{
+		ScreenName: "taofoufoufou",
+	}
+
+	list, err := app.ListsOwnerships(param)
+
+	if err != nil {
+		t.Error(err)
+	} else {
+		for _, l := range list.Lists {
+			t.Log(l.Name, l.FullName, l.Description, l.Slug)
+		}
+	}
+}

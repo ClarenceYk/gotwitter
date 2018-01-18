@@ -18,6 +18,7 @@ func (app *Application) ShowFriendship(param *ShowFriendshipParam) (relation *Re
 
 func (app *Application) showFriendshipReq(param *ShowFriendshipParam) (*http.Request, error) {
 	return app.getRequest(
+		"GET",
 		"https://api.twitter.com/1.1/friendships/show.json",
 		param,
 	)

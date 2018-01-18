@@ -21,6 +21,7 @@ func (app *Application) FollowerIDs(param *FollowerIDsParam) (ids *FollowerIDs, 
 
 func (app *Application) followerIDsReq(param *FollowerIDsParam) (*http.Request, error) {
 	return app.getRequest(
+		"GET",
 		"https://api.twitter.com/1.1/followers/ids.json",
 		param,
 	)
@@ -42,6 +43,7 @@ func (app *Application) FollowersList(param *FollowersListParam) (list *Follower
 
 func (app *Application) followersListReq(param *FollowersListParam) (*http.Request, error) {
 	return app.getRequest(
+		"GET",
 		"https://api.twitter.com/1.1/followers/list.json",
 		param,
 	)

@@ -21,6 +21,7 @@ func (app *Application) FriendIDs(param *FriendIDsParam) (ids *FriendIDs, err er
 
 func (app *Application) friendIDsReq(param *FriendIDsParam) (*http.Request, error) {
 	return app.getRequest(
+		"GET",
 		"https://api.twitter.com/1.1/friends/ids.json",
 		param,
 	)
@@ -42,6 +43,7 @@ func (app *Application) FriendsList(param *FriendsListParam) (list *FriendsList,
 
 func (app *Application) friendsListReq(param *FriendsListParam) (*http.Request, error) {
 	return app.getRequest(
+		"GET",
 		"https://api.twitter.com/1.1/friends/list.json",
 		param,
 	)

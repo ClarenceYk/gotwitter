@@ -12,7 +12,7 @@ import (
 	"github.com/google/go-querystring/query"
 )
 
-func (app *Application) getRequest(baseURL string, param interface{}) (*http.Request, error) {
+func (app *Application) getRequest(method, baseURL string, param interface{}) (*http.Request, error) {
 	v, err := query.Values(param)
 	if err != nil {
 		return nil, err
@@ -27,7 +27,7 @@ func (app *Application) getRequest(baseURL string, param interface{}) (*http.Req
 		fmt.Printf("[DEBUG 1]getRequest() query <---> %s\n", qstr)
 	}
 
-	req, err := http.NewRequest("GET", qstr, nil)
+	req, err := http.NewRequest(method, qstr, nil)
 	if err != nil {
 		return nil, err
 	}

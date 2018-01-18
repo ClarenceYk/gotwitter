@@ -427,3 +427,243 @@ type List struct {
 	Following       bool   `json:"following"`
 	User            *User  `json:"user"`
 }
+
+// ListMembers holds the users in a list.
+type ListMembers struct {
+	PreviousCursor    int    `json:"previous_cursor"`
+	PreviousCursorStr string `json:"previous_cursor_str"`
+	NextCursor        int    `json:"next_cursor"`
+	Users             []*struct {
+		User
+		Entities *Entities `json:"entities"`
+		Status   *Status   `json:"status"`
+	} `json:"users"`
+	NextCursorStr string `json:"next_cursor_str"`
+}
+
+// ListMembersShow holds informations of a user.
+type ListMembersShow struct {
+	ID             string `json:"id"`
+	IDStr          string `json:"id_str"`
+	IsTranslator   bool   `json:"is_translator"`
+	DefaultProfile bool   `json:"default_profile"`
+	Entities       struct {
+		URL struct {
+			Urls []struct {
+				URL         string `json:"url"`
+				Indices     []int  `json:"indices"`
+				DisplayURL  string `json:"display_url"`
+				ExpandedURL string `json:"expanded_url"`
+			} `json:"urls"`
+		} `json:"url"`
+		Description struct {
+			Urls []interface{} `json:"urls"`
+		} `json:"description"`
+	} `json:"entities"`
+	ShowAllInlineMedia             bool   `json:"show_all_inline_media"`
+	ProfileUseBackgroundImage      bool   `json:"profile_use_background_image"`
+	ProfileTextColor               string `json:"profile_text_color"`
+	UtcOffset                      int    `json:"utc_offset"`
+	ListedCount                    int    `json:"listed_count"`
+	Name                           string `json:"name"`
+	Notifications                  bool   `json:"notifications"`
+	ProfileSidebarBorderColor      string `json:"profile_sidebar_border_color"`
+	GeoEnabled                     bool   `json:"geo_enabled"`
+	FollowRequestSent              bool   `json:"follow_request_sent"`
+	URL                            string `json:"url"`
+	Lang                           string `json:"lang"`
+	ProfileImageURLHTTPS           string `json:"profile_image_url_https"`
+	CreatedAt                      string `json:"created_at"`
+	Protected                      bool   `json:"protected"`
+	FollowersCount                 int    `json:"followers_count"`
+	ProfileBackgroundImageURLHTTPS string `json:"profile_background_image_url_https"`
+	ScreenName                     string `json:"screen_name"`
+	ProfileBackgroundTile          bool   `json:"profile_background_tile"`
+	FriendsCount                   int    `json:"friends_count"`
+	ProfileSidebarFillColor        string `json:"profile_sidebar_fill_color"`
+	Description                    string `json:"description"`
+	TimeZone                       string `json:"time_zone"`
+	DefaultProfileImage            bool   `json:"default_profile_image"`
+	Location                       string `json:"location"`
+	ProfileImageURL                string `json:"profile_image_url"`
+	FavouritesCount                int    `json:"favourites_count"`
+	Following                      bool   `json:"following"`
+	ProfileBackgroundColor         string `json:"profile_background_color"`
+	Verified                       bool   `json:"verified"`
+	StatusesCount                  int    `json:"statuses_count"`
+	Status                         struct {
+		Entities struct {
+			Urls []struct {
+				URL         string `json:"url"`
+				Indices     []int  `json:"indices"`
+				DisplayURL  string `json:"display_url"`
+				ExpandedURL string `json:"expanded_url"`
+			} `json:"urls"`
+			Hashtags     []interface{} `json:"hashtags"`
+			UserMentions []struct {
+				Name       string `json:"name"`
+				Indices    []int  `json:"indices"`
+				ScreenName string `json:"screen_name"`
+				ID         string `json:"id"`
+				IDStr      string `json:"id_str"`
+			} `json:"user_mentions"`
+		} `json:"entities"`
+		Geo                  interface{} `json:"geo"`
+		Place                interface{} `json:"place"`
+		InReplyToScreenName  string      `json:"in_reply_to_screen_name"`
+		InReplyToUserID      int         `json:"in_reply_to_user_id"`
+		Retweeted            bool        `json:"retweeted"`
+		InReplyToStatusID    int64       `json:"in_reply_to_status_id"`
+		CreatedAt            string      `json:"created_at"`
+		PossiblySensitive    bool        `json:"possibly_sensitive"`
+		InReplyToStatusIDStr string      `json:"in_reply_to_status_id_str"`
+		Contributors         interface{} `json:"contributors"`
+		Favorited            bool        `json:"favorited"`
+		Source               string      `json:"source"`
+		InReplyToUserIDStr   string      `json:"in_reply_to_user_id_str"`
+		RetweetCount         int         `json:"retweet_count"`
+		ID                   string      `json:"id"`
+		IDStr                string      `json:"id_str"`
+		Coordinates          interface{} `json:"coordinates"`
+		Truncated            bool        `json:"truncated"`
+		Text                 string      `json:"text"`
+	} `json:"status"`
+	ContributorsEnabled       bool   `json:"contributors_enabled"`
+	ProfileBackgroundImageURL string `json:"profile_background_image_url"`
+	ProfileLinkColor          string `json:"profile_link_color"`
+}
+
+// ListsMemberships is the lists the specified user has been added to.
+type ListsMemberships struct {
+	PreviousCursor int `json:"previous_cursor"`
+	Lists          []struct {
+		Name            string `json:"name"`
+		Slug            string `json:"slug"`
+		URI             string `json:"uri"`
+		IDStr           string `json:"id_str"`
+		SubscriberCount int    `json:"subscriber_count"`
+		MemberCount     int    `json:"member_count"`
+		Mode            string `json:"mode"`
+		ID              int    `json:"id"`
+		FullName        string `json:"full_name"`
+		Description     string `json:"description"`
+		User            struct {
+			ProfileSidebarBorderColor      string      `json:"profile_sidebar_border_color"`
+			ProfileBackgroundTile          bool        `json:"profile_background_tile"`
+			ProfileSidebarFillColor        string      `json:"profile_sidebar_fill_color"`
+			Name                           string      `json:"name"`
+			CreatedAt                      string      `json:"created_at"`
+			Location                       string      `json:"location"`
+			ProfileImageURL                string      `json:"profile_image_url"`
+			FollowRequestSent              bool        `json:"follow_request_sent"`
+			ProfileLinkColor               string      `json:"profile_link_color"`
+			IsTranslator                   bool        `json:"is_translator"`
+			IDStr                          string      `json:"id_str"`
+			DefaultProfile                 bool        `json:"default_profile"`
+			FavouritesCount                int         `json:"favourites_count"`
+			ContributorsEnabled            bool        `json:"contributors_enabled"`
+			URL                            interface{} `json:"url"`
+			ID                             int         `json:"id"`
+			ProfileImageURLHTTPS           string      `json:"profile_image_url_https"`
+			UtcOffset                      int         `json:"utc_offset"`
+			ProfileUseBackgroundImage      bool        `json:"profile_use_background_image"`
+			ListedCount                    int         `json:"listed_count"`
+			Lang                           string      `json:"lang"`
+			FollowersCount                 int         `json:"followers_count"`
+			ProfileTextColor               string      `json:"profile_text_color"`
+			Protected                      bool        `json:"protected"`
+			ProfileBackgroundColor         string      `json:"profile_background_color"`
+			Verified                       bool        `json:"verified"`
+			TimeZone                       string      `json:"time_zone"`
+			ProfileBackgroundImageURLHTTPS string      `json:"profile_background_image_url_https"`
+			Description                    string      `json:"description"`
+			Notifications                  bool        `json:"notifications"`
+			GeoEnabled                     bool        `json:"geo_enabled"`
+			StatusesCount                  int         `json:"statuses_count"`
+			DefaultProfileImage            bool        `json:"default_profile_image"`
+			FriendsCount                   int         `json:"friends_count"`
+			ProfileBackgroundImageURL      string      `json:"profile_background_image_url"`
+			Following                      bool        `json:"following"`
+			ScreenName                     string      `json:"screen_name"`
+			ShowAllInlineMedia             bool        `json:"show_all_inline_media"`
+		} `json:"user"`
+		Following bool `json:"following"`
+	} `json:"lists"`
+	PreviousCursorStr string `json:"previous_cursor_str"`
+	NextCursor        int64  `json:"next_cursor"`
+	NextCursorStr     string `json:"next_cursor_str"`
+}
+
+// ListsOwnerships lists owned by a specified user.
+type ListsOwnerships struct {
+	NextCursor        int    `json:"next_cursor"`
+	NextCursorStr     string `json:"next_cursor_str"`
+	PreviousCursor    int    `json:"previous_cursor"`
+	PreviousCursorStr string `json:"previous_cursor_str"`
+	Lists             []struct {
+		ID              int    `json:"id"`
+		IDStr           string `json:"id_str"`
+		Name            string `json:"name"`
+		URI             string `json:"uri"`
+		SubscriberCount int    `json:"subscriber_count"`
+		MemberCount     int    `json:"member_count"`
+		Mode            string `json:"mode"`
+		Description     string `json:"description"`
+		Slug            string `json:"slug"`
+		FullName        string `json:"full_name"`
+		CreatedAt       string `json:"created_at"`
+		Following       bool   `json:"following"`
+		User            struct {
+			ID          int    `json:"id"`
+			IDStr       string `json:"id_str"`
+			Name        string `json:"name"`
+			ScreenName  string `json:"screen_name"`
+			Location    string `json:"location"`
+			Description string `json:"description"`
+			URL         string `json:"url"`
+			Entities    struct {
+				URL struct {
+					Urls []struct {
+						URL         string      `json:"url"`
+						ExpandedURL interface{} `json:"expanded_url"`
+						Indices     []int       `json:"indices"`
+					} `json:"urls"`
+				} `json:"url"`
+				Description struct {
+					Urls []interface{} `json:"urls"`
+				} `json:"description"`
+			} `json:"entities"`
+			Protected                      bool   `json:"protected"`
+			FollowersCount                 int    `json:"followers_count"`
+			FriendsCount                   int    `json:"friends_count"`
+			ListedCount                    int    `json:"listed_count"`
+			CreatedAt                      string `json:"created_at"`
+			FavouritesCount                int    `json:"favourites_count"`
+			UtcOffset                      int    `json:"utc_offset"`
+			TimeZone                       string `json:"time_zone"`
+			GeoEnabled                     bool   `json:"geo_enabled"`
+			Verified                       bool   `json:"verified"`
+			StatusesCount                  int    `json:"statuses_count"`
+			Lang                           string `json:"lang"`
+			ContributorsEnabled            bool   `json:"contributors_enabled"`
+			IsTranslator                   bool   `json:"is_translator"`
+			ProfileBackgroundColor         string `json:"profile_background_color"`
+			ProfileBackgroundImageURL      string `json:"profile_background_image_url"`
+			ProfileBackgroundImageURLHTTPS string `json:"profile_background_image_url_https"`
+			ProfileBackgroundTile          bool   `json:"profile_background_tile"`
+			ProfileImageURL                string `json:"profile_image_url"`
+			ProfileImageURLHTTPS           string `json:"profile_image_url_https"`
+			ProfileBannerURL               string `json:"profile_banner_url"`
+			ProfileLinkColor               string `json:"profile_link_color"`
+			ProfileSidebarBorderColor      string `json:"profile_sidebar_border_color"`
+			ProfileSidebarFillColor        string `json:"profile_sidebar_fill_color"`
+			ProfileTextColor               string `json:"profile_text_color"`
+			ProfileUseBackgroundImage      bool   `json:"profile_use_background_image"`
+			DefaultProfile                 bool   `json:"default_profile"`
+			DefaultProfileImage            bool   `json:"default_profile_image"`
+			Following                      bool   `json:"following"`
+			FollowRequestSent              bool   `json:"follow_request_sent"`
+			Notifications                  bool   `json:"notifications"`
+		} `json:"user"`
+	} `json:"lists"`
+}
