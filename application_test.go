@@ -225,7 +225,7 @@ func TestGetList(t *testing.T) {
 		t.Error(err)
 	} else {
 		for _, list := range lists {
-			t.Log(list.FullName, list.CreatedAt, list.MemberCount, list.SubscriberCount, *list.User)
+			t.Log(list.ID, list.FullName, list.CreatedAt, list.MemberCount, list.SubscriberCount, *list.User)
 		}
 	}
 }
@@ -298,5 +298,21 @@ func TestListsOwnerships(t *testing.T) {
 		for _, l := range list.Lists {
 			t.Log(l.Name, l.FullName, l.Description, l.Slug)
 		}
+	}
+}
+
+func TestListsShow(t *testing.T) {
+	app, _ := NewApplication(2)
+
+	param := &ListsShowParam{
+		ListID: 86837304,
+	}
+
+	list, err := app.ListsShow(param)
+
+	if err != nil {
+		t.Error(err)
+	} else {
+		t.Log(list.CreatedAt, list.FullName, list.Description, list.Slug)
 	}
 }

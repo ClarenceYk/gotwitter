@@ -136,3 +136,25 @@ func (app *Application) getListsOwnershipsReq(param *ListsOwnershipsParam) (*htt
 		param,
 	)
 }
+
+// ListsShow returns the specified lists.
+// See more at https://developer.twitter.com/en/docs/accounts-and-users/create-manage-lists/api-reference/get-lists-show
+func (app *Application) ListsShow(param *ListsShowParam) (list *List, err error) {
+	req, err := app.getListsShowReq(param)
+	if err != nil {
+		return
+	}
+
+	list = &List{}
+	err = app.doRequest(req, list)
+
+	return
+}
+
+func (app *Application) getListsShowReq(param *ListsShowParam) (*http.Request, error) {
+	return app.getRequest(
+		"GET",
+		"https://api.twitter.com/1.1/lists/show.json",
+		param,
+	)
+}

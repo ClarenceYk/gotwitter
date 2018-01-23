@@ -133,3 +133,11 @@ type ListsOwnershipsParam struct {
 	Count      int    `url:"count,omitempty"`
 	Cursor     int    `url:"cursor,omitempty"`
 }
+
+// ListsShowParam holds the parameters for retrieving a specified list.
+type ListsShowParam struct {
+	ListID          int64  `url:"list_id,omitempty"`
+	Slug            string `url:"slug,omitempty"`
+	OwnerScreenName string `url:"owner_screen_name,omitempty"`
+	OwnerID         int64  `url:"owner_id,omitempty"`
+}
