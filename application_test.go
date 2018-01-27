@@ -316,3 +316,80 @@ func TestListsShow(t *testing.T) {
 		t.Log(list.CreatedAt, list.FullName, list.Description, list.Slug)
 	}
 }
+
+func TestListsStatuses(t *testing.T) {
+	app, _ := NewApplication(2)
+
+	param := &ListsStatusesParam{
+		ListID: 86837304,
+	}
+
+	ts, err := app.ListsStatuses(param)
+
+	if err != nil {
+		t.Error(err)
+	} else {
+		for _, tweet := range ts {
+			t.Log(tweet.Text)
+			if tweet.QuotedStatus != nil {
+				t.Log(tweet.QuotedStatus.Text)
+			}
+			if tweet.RetweetedStatus != nil {
+				t.Log(tweet.RetweetedStatus.Text)
+			}
+		}
+	}
+}
+
+func TestListsSubscribers(t *testing.T) {
+	app, _ := NewApplication(2)
+
+	param := &ListsSubscribersParam{
+		ListID: 86837304,
+	}
+
+	subscribers, err := app.ListsSubscribers(param)
+
+	if err != nil {
+		t.Error(err)
+	} else {
+		for _, user := range subscribers.Users {
+			t.Log(user.ScreenName, user.CreatedAt)
+		}
+	}
+}
+
+func TestListsSubscriberShow(t *testing.T) {
+	app, _ := NewApplication(2)
+
+	param := &ListsSubscriberShowParam{
+		ListID: 86837304,
+		UserID: 750713,
+	}
+
+	subscriber, err := app.ListsSubscriberShow(param)
+
+	if err != nil {
+		t.Error(err)
+	} else {
+		t.Log(subscriber.ScreenName, subscriber.Name, subscriber.Entities.Hashtags, subscriber.Status.Text)
+	}
+}
+
+func TestListsSubscriptions(t *testing.T) {
+	app, _ := NewApplication(2)
+
+	param := &ListsSubscriptionsParam{
+		ScreenName: "yuuuuulle",
+	}
+
+	lists, err := app.ListsSubscriptions(param)
+
+	if err != nil {
+		t.Error(err)
+	} else {
+		for _, list := range lists.Lists {
+			t.Log(list.ID, list.FullName, list.CreatedAt, list.MemberCount, list.SubscriberCount, *list.User)
+		}
+	}
+}

@@ -667,3 +667,28 @@ type ListsOwnerships struct {
 		} `json:"user"`
 	} `json:"lists"`
 }
+
+// ListsSubscribers holds the users in a list.
+type ListsSubscribers struct {
+	PreviousCursor    int     `json:"previous_cursor"`
+	PreviousCursorStr string  `json:"previous_cursor_str"`
+	NextCursor        int     `json:"next_cursor"`
+	Users             []*User `json:"users"`
+	NextCursorStr     string  `json:"next_cursor_str"`
+}
+
+// ListsSubscriber holds the users in a list.
+type ListsSubscriber struct {
+	User
+	Entities *Entities `json:"entities"`
+	Status   *Status   `json:"status"`
+}
+
+// ListsSubscriptions holds the users in a list.
+type ListsSubscriptions struct {
+	PreviousCursor    int     `json:"previous_cursor"`
+	PreviousCursorStr string  `json:"previous_cursor_str"`
+	NextCursor        int     `json:"next_cursor"`
+	Lists             []*List `json:"lists"`
+	NextCursorStr     string  `json:"next_cursor_str"`
+}

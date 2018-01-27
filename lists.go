@@ -100,3 +100,59 @@ func (app *Application) ListsShow(param RequestParameters) (list *List, err erro
 
 	return
 }
+
+// ListsStatuses returns a timeline of a tweets authored by members of the specified list.
+// See more at https://developer.twitter.com/en/docs/accounts-and-users/create-manage-lists/api-reference/get-lists-statuses
+func (app *Application) ListsStatuses(param RequestParameters) (ts []*Tweet, err error) {
+	req, err := param.GetRequest(app)
+	if err != nil {
+		return
+	}
+
+	ts = make([]*Tweet, 0)
+	err = app.doRequest(req, &ts)
+
+	return
+}
+
+// ListsSubscribers returns the subscribers of the specified list.
+// See more at https://developer.twitter.com/en/docs/accounts-and-users/create-manage-lists/api-reference/get-lists-subscribers
+func (app *Application) ListsSubscribers(param RequestParameters) (subscribers *ListsSubscribers, err error) {
+	req, err := param.GetRequest(app)
+	if err != nil {
+		return
+	}
+
+	subscribers = &ListsSubscribers{}
+	err = app.doRequest(req, subscribers)
+
+	return
+}
+
+// ListsSubscriberShow check if the specified suer is a subscriber of the specified list.
+// See more at https://developer.twitter.com/en/docs/accounts-and-users/create-manage-lists/api-reference/get-lists-subscribers-show
+func (app *Application) ListsSubscriberShow(param RequestParameters) (subscriber *ListsSubscriber, err error) {
+	req, err := param.GetRequest(app)
+	if err != nil {
+		return
+	}
+
+	subscriber = &ListsSubscriber{}
+	err = app.doRequest(req, subscriber)
+
+	return
+}
+
+// ListsSubscriptions Obtian a collection of the lists the specified user is subscribed to.
+// See more at https://developer.twitter.com/en/docs/accounts-and-users/create-manage-lists/api-reference/get-lists-subscriptions
+func (app *Application) ListsSubscriptions(param RequestParameters) (subscriptions *ListsSubscriptions, err error) {
+	req, err := param.GetRequest(app)
+	if err != nil {
+		return
+	}
+
+	subscriptions = &ListsSubscriptions{}
+	err = app.doRequest(req, subscriptions)
+
+	return
+}

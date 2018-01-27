@@ -305,3 +305,84 @@ func (param *ListsShowParam) GetRequest(app *Application) (*http.Request, error)
 		param,
 	)
 }
+
+// ListsStatusesParam holds the parameters for retrieving timeline of a specified list.
+type ListsStatusesParam struct {
+	ListID          int64  `url:"list_id,omitempty"`
+	Slug            string `url:"slug,omitempty"`
+	OwnerScreenName string `url:"owner_screen_name,omitempty"`
+	OwnerID         int64  `url:"owner_id,omitempty"`
+	SinceID         int64  `url:"since_id,omitempty"`
+	MaxID           int64  `url:"max_id,omitempty"`
+	Count           int    `url:"count,omitempty"`
+	IncludeEntities bool   `url:"include_entities,omitempty"`
+	IncludeRTs      bool   `url:"include_rts,omitempty"`
+}
+
+// GetRequest return the request
+func (param *ListsStatusesParam) GetRequest(app *Application) (*http.Request, error) {
+	return app.getRequest(
+		"GET",
+		"https://api.twitter.com/1.1/lists/statuses.json",
+		param,
+	)
+}
+
+// ListsSubscribersParam holds the parameters for retrieving users who suberscribe the specified list.
+type ListsSubscribersParam struct {
+	ListID          int64  `url:"list_id,omitempty"`
+	Slug            string `url:"slug,omitempty"`
+	OwnerScreenName string `url:"owner_screen_name,omitempty"`
+	OwnerID         int64  `url:"owner_id,omitempty"`
+	Count           int    `url:"count,omitempty"`
+	Cursor          int    `url:"cursor,omitempty"`
+	IncludeEntities bool   `url:"include_entities,omitempty"`
+	SkipStatus      bool   `url:"skip_status,omitempty"`
+}
+
+// GetRequest return the request
+func (param *ListsSubscribersParam) GetRequest(app *Application) (*http.Request, error) {
+	return app.getRequest(
+		"GET",
+		"https://api.twitter.com/1.1/lists/subscribers.json",
+		param,
+	)
+}
+
+// ListsSubscriberShowParam holds the parameters for checking if the specified user is a subscriber of the specified list.
+type ListsSubscriberShowParam struct {
+	ListID          int64  `url:"list_id,omitempty"`
+	Slug            string `url:"slug,omitempty"`
+	OwnerScreenName string `url:"owner_screen_name,omitempty"`
+	OwnerID         int64  `url:"owner_id,omitempty"`
+	UserID          int64  `url:"user_id,omitempty"`
+	ScreenName      string `url:"screen_name,omitempty"`
+	IncludeEntities bool   `url:"include_entities,omitempty"`
+	SkipStatus      bool   `url:"skip_status,omitempty"`
+}
+
+// GetRequest return the request
+func (param *ListsSubscriberShowParam) GetRequest(app *Application) (*http.Request, error) {
+	return app.getRequest(
+		"GET",
+		"https://api.twitter.com/1.1/lists/subscribers/show.json",
+		param,
+	)
+}
+
+// ListsSubscriptionsParam holds the parameters for obtaining a collection of the lists the specified user is subscribed to.
+type ListsSubscriptionsParam struct {
+	UserID     int64  `url:"user_id,omitempty"`
+	ScreenName string `url:"screen_name,omitempty"`
+	Count      int    `url:"count,omitempty"`
+	Cursor     int    `url:"cursor,omitempty"`
+}
+
+// GetRequest return the request
+func (param *ListsSubscriptionsParam) GetRequest(app *Application) (*http.Request, error) {
+	return app.getRequest(
+		"GET",
+		"https://api.twitter.com/1.1/lists/subscriptions.json",
+		param,
+	)
+}
