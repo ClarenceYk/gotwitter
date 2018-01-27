@@ -1,14 +1,12 @@
 package gotwitter
 
-import "net/http"
-
 // FollowerIDs retrieve follower ids.
 // See more at https://developer.twitter.com/en/docs/accounts-and-users/follow-search-get-users/api-reference/get-followers-ids
-func (app *Application) FollowerIDs(param *FollowerIDsParam) (ids *FollowerIDs, err error) {
+func (app *Application) FollowerIDs(param RequestParameters) (ids *FollowerIDs, err error) {
 	// NOTICE: stringify must be false
-	param.StringifyIDs = false
+	param.(*FollowerIDsParam).StringifyIDs = false
 
-	req, err := app.followerIDsReq(param)
+	req, err := param.GetRequest(app)
 	if err != nil {
 		return
 	}
@@ -19,18 +17,10 @@ func (app *Application) FollowerIDs(param *FollowerIDsParam) (ids *FollowerIDs, 
 	return
 }
 
-func (app *Application) followerIDsReq(param *FollowerIDsParam) (*http.Request, error) {
-	return app.getRequest(
-		"GET",
-		"https://api.twitter.com/1.1/followers/ids.json",
-		param,
-	)
-}
-
 // FollowersList retrieve a cursored collection of user objects for users following the specified user.
 // See more at https://developer.twitter.com/en/docs/accounts-and-users/follow-search-get-users/api-reference/get-followers-list
-func (app *Application) FollowersList(param *FollowersListParam) (list *FollowersList, err error) {
-	req, err := app.followersListReq(param)
+func (app *Application) FollowersList(param RequestParameters) (list *FollowersList, err error) {
+	req, err := param.GetRequest(app)
 	if err != nil {
 		return
 	}
@@ -39,12 +29,4 @@ func (app *Application) FollowersList(param *FollowersListParam) (list *Follower
 	err = app.doRequest(req, list)
 
 	return
-}
-
-func (app *Application) followersListReq(param *FollowersListParam) (*http.Request, error) {
-	return app.getRequest(
-		"GET",
-		"https://api.twitter.com/1.1/followers/list.json",
-		param,
-	)
 }

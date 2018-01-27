@@ -1,11 +1,9 @@
 package gotwitter
 
-import "net/http"
-
 // ShowFriendship show a friendship between two special users.
 // See more at https://developer.twitter.com/en/docs/accounts-and-users/follow-search-get-users/api-reference/get-friendships-show
-func (app *Application) ShowFriendship(param *ShowFriendshipParam) (relation *Relationship, err error) {
-	req, err := app.showFriendshipReq(param)
+func (app *Application) ShowFriendship(param RequestParameters) (relation *Relationship, err error) {
+	req, err := param.GetRequest(app)
 	if err != nil {
 		return
 	}
@@ -14,12 +12,4 @@ func (app *Application) ShowFriendship(param *ShowFriendshipParam) (relation *Re
 	err = app.doRequest(req, relation)
 
 	return
-}
-
-func (app *Application) showFriendshipReq(param *ShowFriendshipParam) (*http.Request, error) {
-	return app.getRequest(
-		"GET",
-		"https://api.twitter.com/1.1/friendships/show.json",
-		param,
-	)
 }
