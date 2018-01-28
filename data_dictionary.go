@@ -4,35 +4,35 @@ package gotwitter
 // See more at https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/tweet-object
 type Tweet struct {
 	ID
-	CreatedAt            string       `json:"created_at"`
-	Text                 string       `json:"text"`
-	Source               string       `json:"source"`
-	Truncated            bool         `json:"truncated"`
-	InReplyToStatusID    int64        `json:"in_reply_to_status_id"`
-	InReplyToStatusIDStr string       `json:"in_reply_to_status_id_str"`
-	InReplyToUserID      int64        `json:"in_reply_to_user_id"`
-	InReplyToUserIDStr   string       `json:"in_reply_to_user_id_str"`
-	InReplyToScreenName  string       `json:"in_reply_to_screen_name"`
-	User                 *User        `json:"user"`
-	Coordinates          *Coordinates `json:"coordinates"`
-	Place                Places       `json:"place"`
-	QuotedStatusID       int64        `json:"quoted_status_id"`
-	QuotedStatusIDStr    string       `json:"quoted_status_id_str"`
-	IsQuoteStatus        bool         `json:"is_quote_status"`
-	QuotedStatus         *Tweet       `json:"quoted_status"`
-	RetweetedStatus      *Tweet       `json:"retweeted_status"`
-	QuoteCount           int          `json:"quote_count"`
-	ReplyCount           int          `json:"reply_count"`
-	RetweetCount         int          `json:"retweet_count"`
-	FavoriteCount        int          `json:"favorite_count"`
-	Entities             *Entities    `json:"entities"`
-	ExtendedEntities     interface{}  `json:"extended_entities"`
-	Favorited            bool         `json:"favorited"`
-	Retweeted            bool         `json:"retweeted"`
-	PossiblySensitive    bool         `json:"possibly_sensitive"`
-	FilterLevel          string       `json:"filter_level"`
-	Lang                 string       `json:"lang"`
-	MatchingRules        interface{}  `json:"matching_rules"`
+	CreatedAt            string            `json:"created_at"`
+	Text                 string            `json:"text"`
+	Source               string            `json:"source"`
+	Truncated            bool              `json:"truncated"`
+	InReplyToStatusID    int64             `json:"in_reply_to_status_id"`
+	InReplyToStatusIDStr string            `json:"in_reply_to_status_id_str"`
+	InReplyToUserID      int64             `json:"in_reply_to_user_id"`
+	InReplyToUserIDStr   string            `json:"in_reply_to_user_id_str"`
+	InReplyToScreenName  string            `json:"in_reply_to_screen_name"`
+	User                 *UserWithEntities `json:"user"`
+	Coordinates          *Coordinates      `json:"coordinates"`
+	Place                Places            `json:"place"`
+	QuotedStatusID       int64             `json:"quoted_status_id"`
+	QuotedStatusIDStr    string            `json:"quoted_status_id_str"`
+	IsQuoteStatus        bool              `json:"is_quote_status"`
+	QuotedStatus         *Tweet            `json:"quoted_status"`
+	RetweetedStatus      *Tweet            `json:"retweeted_status"`
+	QuoteCount           int               `json:"quote_count"`
+	ReplyCount           int               `json:"reply_count"`
+	RetweetCount         int               `json:"retweet_count"`
+	FavoriteCount        int               `json:"favorite_count"`
+	Entities             *Entities         `json:"entities"`
+	ExtendedEntities     interface{}       `json:"extended_entities"`
+	Favorited            bool              `json:"favorited"`
+	Retweeted            bool              `json:"retweeted"`
+	PossiblySensitive    bool              `json:"possibly_sensitive"`
+	FilterLevel          string            `json:"filter_level"`
+	Lang                 string            `json:"lang"`
+	MatchingRules        interface{}       `json:"matching_rules"`
 }
 
 // User holds all the informations of a twitter user.
@@ -691,4 +691,13 @@ type ListsSubscriptions struct {
 	NextCursor        int     `json:"next_cursor"`
 	Lists             []*List `json:"lists"`
 	NextCursorStr     string  `json:"next_cursor_str"`
+}
+
+// Retweeters holds the users in a list.
+type Retweeters struct {
+	PreviousCursor    int     `json:"previous_cursor"`
+	PreviousCursorStr string  `json:"previous_cursor_str"`
+	NextCursor        int     `json:"next_cursor"`
+	NextCursorStr     string  `json:"next_cursor_str"`
+	IDs               []int64 `json:"ids"`
 }

@@ -18,67 +18,35 @@ type Application struct {
 	ConsumerSecret string
 	Name           string
 	BearerToken    string
-	debugLevel     int
+	DebugLevel     int
 	httpClient     *http.Client
 }
 
 // NewApplication creates a new application.
-// If you pass 2 parameters to *params* that means you
-// passed your consumer key and consumer secret to
-// this funcation(consumer key followed by consumer secret).
-//
-// If you pass 3 paramters to *params* that means you passed
-// your consumer key, consumer secret and application name to
-// this function(consumer key followed by consumer secret and name).
-//
-// You can pass noting to this funcation so that the function will
-// obtain the infos from keys.conf file automatically.
-// The format of keys.conf file is like:
-//   consumerKey=<your consumer key>
-//   consumerSecret=<your consumer screte>
-//   name=<your application name> /*optional*/
-//   token=<your authorized token> /*optional*/
-func NewApplication(debug int, params ...string) (*Application, error) {
-	var (
-		consumerKey    string
-		consumerSecret string
-		name           string
-		token          string
-	)
-
-	if len(params) == 2 {
-		consumerKey = params[0]
-		consumerSecret = params[1]
-	} else if len(params) == 3 {
-		consumerKey = params[0]
-		consumerSecret = params[1]
-		name = params[2]
-	} else {
-		configs, err := getConfig(debug, "keys.conf")
-		if err != nil {
-			return nil, err
-		}
-
-		for k, v := range configs {
-			switch k {
-			case "consumerKey":
-				consumerKey = v
-			case "consumerSecret":
-				consumerSecret = v
-			case "name":
-				name = v
-			case "token":
-				token = v
-			}
-		}
+func NewApplication(debug int, key, secret, name string) (*Application, error) {
+	app := &Application{
+		ConsumerKey:    key,
+		ConsumerSecret: secret,
+		Name:           name,
+		DebugLevel:     debug,
+		httpClient:     &http.Client{},
 	}
 
+	if err := app.Authorize(); err != nil {
+		return nil, err
+	}
+
+	return app, nil
+}
+
+// NewApplicationWithToken creates a new application.
+func NewApplicationWithToken(debug int, key, secret, name, token string) (*Application, error) {
 	return &Application{
-		ConsumerKey:    consumerKey,
-		ConsumerSecret: consumerSecret,
+		ConsumerKey:    key,
+		ConsumerSecret: secret,
 		Name:           name,
 		BearerToken:    token,
-		debugLevel:     debug,
+		DebugLevel:     debug,
 		httpClient:     &http.Client{},
 	}, nil
 }
@@ -109,7 +77,7 @@ func (app *Application) Authorize() error {
 	if err != nil {
 		return fmt.Errorf("error<*Application.Authorize> err=%s", err)
 	}
-	if app.debugLevel > 1 {
+	if app.DebugLevel > 1 {
 		if buff, err := ioutil.ReadAll(gzipReader); err == nil {
 			fmt.Printf("[DEBUG 2]*Application.Authorize() buff <---> %s\n", string(buff))
 			if err := json.NewDecoder(bytes.NewBuffer(buff)).Decode(&token); err != nil {
@@ -132,7 +100,7 @@ func (app *Application) tokenCredentials() (base64Encoded string) {
 	encodedCS := url.QueryEscape(app.ConsumerSecret)
 	bearer := encodedCK + ":" + encodedCS
 	base64Encoded = base64.StdEncoding.EncodeToString([]byte(bearer))
-	if app.debugLevel > 1 {
+	if app.DebugLevel > 1 {
 		fmt.Printf("[DEBUG 2]*Application.tokenCredentials(): base64Encoded <---> %s\n",
 			base64Encoded,
 		)

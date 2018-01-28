@@ -9,7 +9,13 @@ import (
 	"strings"
 )
 
-func getConfig(debug int, filename string) (map[string]string, error) {
+// GetConfig retrive configurations from keys.conf file.
+// The format of keys.conf file is like:
+//   consumerKey=<your consumer key>
+//   consumerSecret=<your consumer screte>
+//   name=<your application name> /*optional*/
+//   token=<your authorized token> /*optional*/
+func GetConfig(debug int, filename string) (map[string]string, error) {
 	configs := make(map[string]string)
 
 	// Read content of .conf file

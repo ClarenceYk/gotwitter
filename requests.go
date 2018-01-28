@@ -23,7 +23,7 @@ func (app *Application) getRequest(method, baseURL string, param interface{}) (*
 		urlParamStr = "?" + urlParamStr
 	}
 	qstr := baseURL + urlParamStr
-	if app.debugLevel > 0 {
+	if app.DebugLevel > 0 {
 		fmt.Printf("[DEBUG 1]getRequest() query <---> %s\n", qstr)
 	}
 
@@ -54,7 +54,7 @@ func (app *Application) doRequest(req *http.Request, result interface{}) error {
 	}
 
 	var reader io.Reader
-	if app.debugLevel > 1 {
+	if app.DebugLevel > 1 {
 		reader = debugReader{gzipReader}
 	} else {
 		reader = normalReader{gzipReader}
@@ -81,7 +81,7 @@ func (app *Application) requestError(resp *http.Response) error {
 	if err != nil {
 		return err
 	}
-	if app.debugLevel > 1 {
+	if app.DebugLevel > 1 {
 		if buff, err := ioutil.ReadAll(gzipReader); err == nil {
 			fmt.Printf("[DEBUG 2]*Application.requestError() buff <---> %s\n", string(buff))
 			if err := json.NewDecoder(bytes.NewBuffer(buff)).Decode(&errors); err != nil {

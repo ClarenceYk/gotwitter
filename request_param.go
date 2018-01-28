@@ -1,6 +1,7 @@
 package gotwitter
 
 import (
+	"fmt"
 	"net/http"
 )
 
@@ -383,6 +384,95 @@ func (param *ListsSubscriptionsParam) GetRequest(app *Application) (*http.Reques
 	return app.getRequest(
 		"GET",
 		"https://api.twitter.com/1.1/lists/subscriptions.json",
+		param,
+	)
+}
+
+// StatusesShowParam holds the parameters for retriving a single tweet.
+type StatusesShowParam struct {
+	ID                int64 `url:"id"`
+	TrimUser          bool  `url:"trim_user"`
+	IncludeMyRetweet  bool  `url:"include_my_retweet"`
+	IncludeExtAltText bool  `url:"include_ext_alt_text"`
+}
+
+// GetRequest return the request
+func (param *StatusesShowParam) GetRequest(app *Application) (*http.Request, error) {
+	return app.getRequest(
+		"GET",
+		"https://api.twitter.com/1.1/statuses/show.json",
+		param,
+	)
+}
+
+// StatusesLookupParam holds the parameters for retriving a list of tweets.
+type StatusesLookupParam struct {
+	IDs               []int64 `url:"id,comma"`
+	IncludeEntities   bool    `url:"include_entities,omitempty"`
+	TrimUser          bool    `url:"trim_user,omitempty"`
+	IncludeExtAltText bool    `url:"include_ext_alt_text,omitempty"`
+	// remove parameter `map` from here.
+	// see at https://developer.twitter.com/en/docs/tweets/post-and-engage/api-reference/get-statuses-lookup
+	// about this parameter.
+	// Map               bool    `url:"map,omitempty"`
+}
+
+// GetRequest return the request
+func (param *StatusesLookupParam) GetRequest(app *Application) (*http.Request, error) {
+	return app.getRequest(
+		"GET",
+		"https://api.twitter.com/1.1/statuses/lookup.json",
+		param,
+	)
+}
+
+// StatusesRetweetsParam holds the parameters for retriving a list of re-tweets.
+type StatusesRetweetsParam struct {
+	ID       int64 `url:"-"`
+	Count    int   `url:"count,omitempty"`
+	TrimUser bool  `url:"trim_user,omitempty"`
+}
+
+// GetRequest return the request
+func (param *StatusesRetweetsParam) GetRequest(app *Application) (*http.Request, error) {
+	return app.getRequest(
+		"GET",
+		fmt.Sprintf("https://api.twitter.com/1.1/statuses/retweets/%d.json", param.ID),
+		param,
+	)
+}
+
+// StatusesRetweetersParam holds the parameters for retriving a list of re-tweets.
+type StatusesRetweetersParam struct {
+	ID     int64 `url:"id"`
+	Count  int   `url:"count,omitempty"`
+	Cursor int   `url:"cursor,omitempty"`
+}
+
+// GetRequest return the request
+func (param *StatusesRetweetersParam) GetRequest(app *Application) (*http.Request, error) {
+	return app.getRequest(
+		"GET",
+		"https://api.twitter.com/1.1/statuses/retweeters/ids.json",
+		param,
+	)
+}
+
+// StatusesFavoritesParam holds the parameters for retriving a list of re-tweets.
+type StatusesFavoritesParam struct {
+	UserID          int64  `url:"user_id,omitempty"`
+	ScreenName      string `url:"screen_name,omitempty"`
+	SinceID         int64  `url:"since_id,omitempty"`
+	Count           int    `url:"count,omitempty"`
+	MaxID           int64  `url:"max_id,omitempty"`
+	IncludeEntities bool   `url:"include_entities,omitempty"`
+}
+
+// GetRequest return the request
+func (param *StatusesFavoritesParam) GetRequest(app *Application) (*http.Request, error) {
+	return app.getRequest(
+		"GET",
+		"https://api.twitter.com/1.1/favorites/list.json",
 		param,
 	)
 }

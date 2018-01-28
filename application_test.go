@@ -4,8 +4,33 @@ import (
 	"testing"
 )
 
+func initApp(debug int) (*Application, error) {
+	config, err := GetConfig(debug, "./keys.conf")
+	if err != nil {
+		return nil, err
+	}
+
+	if _, ok := config["token"]; ok {
+		return NewApplicationWithToken(
+			debug,
+			config["consumerKey"],
+			config["consumerSecret"],
+			config["name"],
+			config["token"],
+		)
+	}
+
+	return NewApplication(
+		debug,
+		config["consumerKey"],
+		config["consumerSecret"],
+		config["name"],
+	)
+
+}
+
 func TestUserTimeline(t *testing.T) {
-	app, _ := NewApplication(0)
+	app, _ := initApp(0)
 
 	param := &UserTimelineParam{
 		UserID: 750713,
@@ -27,11 +52,10 @@ func TestUserTimeline(t *testing.T) {
 			}
 		}
 	}
-
 }
 
 func TestFollowerIDs(t *testing.T) {
-	app, _ := NewApplication(0)
+	app, _ := initApp(0)
 
 	param := &FollowerIDsParam{
 		ScreenName:   "MaYukkee",
@@ -48,7 +72,7 @@ func TestFollowerIDs(t *testing.T) {
 }
 
 func TestFollowersList(t *testing.T) {
-	app, _ := NewApplication(0)
+	app, _ := initApp(0)
 
 	param := &FollowersListParam{
 		ScreenName:          "MaYukkee",
@@ -69,7 +93,7 @@ func TestFollowersList(t *testing.T) {
 }
 
 func TestFriendIDs(t *testing.T) {
-	app, _ := NewApplication(0)
+	app, _ := initApp(0)
 
 	param := &FriendIDsParam{
 		ScreenName: "MaYukkee",
@@ -85,7 +109,7 @@ func TestFriendIDs(t *testing.T) {
 }
 
 func TestFriendsList(t *testing.T) {
-	app, _ := NewApplication(0)
+	app, _ := initApp(0)
 
 	param := &FriendsListParam{
 		ScreenName:          "MaYukkee",
@@ -104,7 +128,7 @@ func TestFriendsList(t *testing.T) {
 }
 
 func TestShowFriendship(t *testing.T) {
-	app, _ := NewApplication(0)
+	app, _ := initApp(0)
 
 	param := &ShowFriendshipParam{
 		SourceScreenName: "MaYukkee",
@@ -122,7 +146,7 @@ func TestShowFriendship(t *testing.T) {
 }
 
 func TestUsersLookup(t *testing.T) {
-	app, _ := NewApplication(2)
+	app, _ := initApp(2)
 
 	param := &UsersLookupParam{
 		UserID:          []int64{177547360, 248806976, 90183678},
@@ -141,7 +165,7 @@ func TestUsersLookup(t *testing.T) {
 }
 
 func TestShowUser(t *testing.T) {
-	app, _ := NewApplication(2)
+	app, _ := initApp(2)
 
 	param := &UserShowParam{
 		UserID:          248806976,
@@ -159,7 +183,7 @@ func TestShowUser(t *testing.T) {
 }
 
 func TestUserSuggestions(t *testing.T) {
-	app, _ := NewApplication(2)
+	app, _ := initApp(2)
 
 	param := &UserSuggestionsParam{}
 
@@ -175,7 +199,7 @@ func TestUserSuggestions(t *testing.T) {
 }
 
 func TestUserSuggestionsWithSlug(t *testing.T) {
-	app, _ := NewApplication(2)
+	app, _ := initApp(2)
 
 	param := &UserSuggestionsParam{
 		Slug: "news",
@@ -194,7 +218,7 @@ func TestUserSuggestionsWithSlug(t *testing.T) {
 }
 
 func TestUserSuggestionsWithSlugAndMembers(t *testing.T) {
-	app, _ := NewApplication(2)
+	app, _ := initApp(2)
 
 	param := &UserSuggestionsParam{
 		Slug:    "funny",
@@ -213,7 +237,7 @@ func TestUserSuggestionsWithSlugAndMembers(t *testing.T) {
 }
 
 func TestGetList(t *testing.T) {
-	app, _ := NewApplication(2)
+	app, _ := initApp(2)
 
 	param := &GetListsParam{
 		UserID: 148781366,
@@ -231,7 +255,7 @@ func TestGetList(t *testing.T) {
 }
 
 func TestListsCreate(t *testing.T) {
-	app, _ := NewApplication(2)
+	app, _ := initApp(2)
 
 	param := &ListsCreateParam{
 		Name: "TESTLIST",
@@ -247,7 +271,7 @@ func TestListsCreate(t *testing.T) {
 }
 
 func TestListMembers(t *testing.T) {
-	app, _ := NewApplication(2)
+	app, _ := initApp(2)
 
 	param := &ListMembersParam{
 		Slug:            "6",
@@ -266,7 +290,7 @@ func TestListMembers(t *testing.T) {
 }
 
 func TestListMemberships(t *testing.T) {
-	app, _ := NewApplication(2)
+	app, _ := initApp(2)
 
 	param := &ListsMembershipsParam{
 		ScreenName: "MaYukkee",
@@ -284,7 +308,7 @@ func TestListMemberships(t *testing.T) {
 }
 
 func TestListsOwnerships(t *testing.T) {
-	app, _ := NewApplication(2)
+	app, _ := initApp(2)
 
 	param := &ListsOwnershipsParam{
 		ScreenName: "taofoufoufou",
@@ -302,7 +326,7 @@ func TestListsOwnerships(t *testing.T) {
 }
 
 func TestListsShow(t *testing.T) {
-	app, _ := NewApplication(2)
+	app, _ := initApp(2)
 
 	param := &ListsShowParam{
 		ListID: 86837304,
@@ -318,7 +342,7 @@ func TestListsShow(t *testing.T) {
 }
 
 func TestListsStatuses(t *testing.T) {
-	app, _ := NewApplication(2)
+	app, _ := initApp(2)
 
 	param := &ListsStatusesParam{
 		ListID: 86837304,
@@ -342,7 +366,7 @@ func TestListsStatuses(t *testing.T) {
 }
 
 func TestListsSubscribers(t *testing.T) {
-	app, _ := NewApplication(2)
+	app, _ := initApp(2)
 
 	param := &ListsSubscribersParam{
 		ListID: 86837304,
@@ -360,7 +384,7 @@ func TestListsSubscribers(t *testing.T) {
 }
 
 func TestListsSubscriberShow(t *testing.T) {
-	app, _ := NewApplication(2)
+	app, _ := initApp(2)
 
 	param := &ListsSubscriberShowParam{
 		ListID: 86837304,
@@ -377,7 +401,7 @@ func TestListsSubscriberShow(t *testing.T) {
 }
 
 func TestListsSubscriptions(t *testing.T) {
-	app, _ := NewApplication(2)
+	app, _ := initApp(2)
 
 	param := &ListsSubscriptionsParam{
 		ScreenName: "yuuuuulle",
@@ -390,6 +414,97 @@ func TestListsSubscriptions(t *testing.T) {
 	} else {
 		for _, list := range lists.Lists {
 			t.Log(list.ID, list.FullName, list.CreatedAt, list.MemberCount, list.SubscriberCount, *list.User)
+		}
+	}
+}
+
+func TestStatusesShow(t *testing.T) {
+	app, _ := initApp(2)
+
+	param := &StatusesShowParam{
+		ID:                957445614102495232,
+		TrimUser:          false,
+		IncludeMyRetweet:  true,
+		IncludeExtAltText: true,
+	}
+
+	tweet, err := app.StatusesShow(param)
+
+	if err != nil {
+		t.Error(err)
+	} else {
+		t.Log(tweet.ID, tweet.Text, tweet.User.ScreenName)
+	}
+}
+
+func TestStatusesLookup(t *testing.T) {
+	app, _ := initApp(2)
+
+	param := &StatusesLookupParam{
+		IDs: []int64{957445614102495232, 957411135031951360},
+	}
+
+	tweets, err := app.StatusesLookup(param)
+
+	if err != nil {
+		t.Error(err)
+	} else {
+		for _, tweet := range tweets {
+			t.Log(tweet.ID, tweet.Text, tweet.User.ScreenName)
+		}
+	}
+}
+
+func TestStatusesRetweets(t *testing.T) {
+	app, _ := initApp(2)
+
+	param := &StatusesRetweetsParam{
+		ID: 509457288717819904,
+	}
+
+	tweets, err := app.StatusesRetweets(param)
+
+	if err != nil {
+		t.Error(err)
+	} else {
+		for _, tweet := range tweets {
+			t.Log(tweet.ID, tweet.Text, tweet.User.ScreenName)
+		}
+	}
+}
+
+func TestStatusesRetweeters(t *testing.T) {
+	app, _ := initApp(2)
+
+	param := &StatusesRetweetersParam{
+		ID: 327473909412814850,
+	}
+
+	retweeters, err := app.StatusesRetweeters(param)
+
+	if err != nil {
+		t.Error(err)
+	} else {
+		for _, retweeter := range retweeters.IDs {
+			t.Log(retweeter, len(retweeters.IDs))
+		}
+	}
+}
+
+func TestStatusesFavorites(t *testing.T) {
+	app, _ := initApp(2)
+
+	param := &StatusesFavoritesParam{
+		ScreenName: "MaYukkee",
+	}
+
+	tweets, err := app.StatusesFavorites(param)
+
+	if err != nil {
+		t.Error(err)
+	} else {
+		for _, tweet := range tweets {
+			t.Log(tweet.Text, tweet.User.ScreenName)
 		}
 	}
 }
