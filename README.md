@@ -1,4 +1,4 @@
-# GoTwitter - A light and simple to use Twitter SDK implemented using Go
+# GoTwitter - An easy to use Twitter SDK implemented using Go
 
 *Notice: This project is under deveplopment only implement Application-only authentication after the last commit.*
 
