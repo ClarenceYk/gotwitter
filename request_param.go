@@ -476,3 +476,56 @@ func (param *StatusesFavoritesParam) GetRequest(app *Application) (*http.Request
 		param,
 	)
 }
+
+// StandardSearchTweetsParam holds the parameters for retriving search results.
+type StandardSearchTweetsParam struct {
+	Query           string   `url:"q"`
+	GEOCode         []string `url:"geocode,comma,omitempty"` // format: [latitude, longitude, radius]
+	Lang            string   `url:"lang,omitempty"`
+	Locale          string   `url:"locale,omitempty"`
+	ResultType      string   `url:"result_type,omitempty"` // mixed, recent, popular
+	Count           int      `url:"count,omitempty"`
+	Until           string   `url:"until,omitempty"` // format: YYYY-MM-DD
+	SinceID         int64    `url:"since_id,omitempty"`
+	MaxID           int64    `url:"max_id,omitempty"`
+	IncludeEntities bool     `url:"include_entities,omitempty"`
+}
+
+// GetRequest return the request
+func (param *StandardSearchTweetsParam) GetRequest(app *Application) (*http.Request, error) {
+	return app.getRequest(
+		"GET",
+		"https://api.twitter.com/1.1/search/tweets.json",
+		param,
+	)
+}
+
+// TrendsPlaceParam is the parameters for retriving trends.
+type TrendsPlaceParam struct {
+	ID      int    `url:"id"`
+	Exclude string `url:"exclude,omitempty"` // hashtags
+}
+
+// GetRequest return the request
+func (param *TrendsPlaceParam) GetRequest(app *Application) (*http.Request, error) {
+	return app.getRequest(
+		"GET",
+		"https://api.twitter.com/1.1/trends/place.json",
+		param,
+	)
+}
+
+// TrendsClosestParam is the parameters for retriving trends.
+type TrendsClosestParam struct {
+	Latitude  float64 `url:"lat"`
+	Longitude float64 `url:"long"`
+}
+
+// GetRequest return the request
+func (param *TrendsClosestParam) GetRequest(app *Application) (*http.Request, error) {
+	return app.getRequest(
+		"GET",
+		"https://api.twitter.com/1.1/trends/closest.json",
+		param,
+	)
+}

@@ -57,7 +57,7 @@ func (app *Application) doRequest(req *http.Request, result interface{}) error {
 	if app.DebugLevel > 1 {
 		reader = debugReader{gzipReader}
 	} else {
-		reader = normalReader{gzipReader}
+		reader = gzipReader
 	}
 
 	if err := json.NewDecoder(reader).Decode(result); err != nil {

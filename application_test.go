@@ -508,3 +508,74 @@ func TestStatusesFavorites(t *testing.T) {
 		}
 	}
 }
+
+func TestStandardSearchTweets(t *testing.T) {
+	app, _ := initApp(2)
+
+	param := &StandardSearchTweetsParam{
+		Query: "Bosco",
+	}
+
+	results, err := app.StandardSearchTweets(param)
+
+	if err != nil {
+		t.Error(err)
+	} else {
+		for _, tweet := range results.Statuses {
+			t.Log(tweet.Text, tweet.User.ScreenName)
+		}
+	}
+}
+
+func TestTrendsPlace(t *testing.T) {
+	app, _ := initApp(2)
+
+	param := &TrendsPlaceParam{
+		ID: 1,
+	}
+
+	results, err := app.TrendsPlace(param)
+
+	if err != nil {
+		t.Error(err)
+	} else {
+		for _, res := range results {
+			for _, r := range res.Trends {
+				t.Log(r.Name, r.TweetVolume)
+			}
+		}
+	}
+}
+
+func TestTrendsAvailable(t *testing.T) {
+	app, _ := initApp(2)
+
+	results, err := app.TrendsAvailable()
+
+	if err != nil {
+		t.Error(err)
+	} else {
+		for _, res := range results {
+			t.Log(res.Name, res.Country, res.Woeid, res.PlaceType.Name)
+		}
+	}
+}
+
+func TestTrendsClosest(t *testing.T) {
+	app, _ := initApp(2)
+
+	param := &TrendsClosestParam{
+		Latitude:  37.781157,
+		Longitude: -122.400612831116,
+	}
+
+	results, err := app.TrendsClosest(param)
+
+	if err != nil {
+		t.Error(err)
+	} else {
+		for _, res := range results {
+			t.Log(res.Name, res.Country, res.Woeid, res.PlaceType.Name)
+		}
+	}
+}

@@ -73,15 +73,3 @@ func (drc debugReader) Read(buff []byte) (int, error) {
 	fmt.Printf("[DEBUG 2] Buffer[0:%d] <---> %s\n", n, string(buff[:n]))
 	return n, nil
 }
-
-type normalReader struct {
-	r io.Reader
-}
-
-func (nrc normalReader) Read(buff []byte) (int, error) {
-	n, err := nrc.r.Read(buff)
-	if err != nil {
-		return n, err
-	}
-	return n, nil
-}

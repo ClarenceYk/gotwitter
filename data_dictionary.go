@@ -1,5 +1,7 @@
 package gotwitter
 
+import "time"
+
 // Tweet holds the information of a tweet.
 // See more at https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/tweet-object
 type Tweet struct {
@@ -677,7 +679,7 @@ type ListsSubscribers struct {
 	NextCursorStr     string  `json:"next_cursor_str"`
 }
 
-// ListsSubscriber holds the users in a list.
+// ListsSubscriber holds the info of a subscriber.
 type ListsSubscriber struct {
 	User
 	Entities *Entities `json:"entities"`
@@ -693,11 +695,72 @@ type ListsSubscriptions struct {
 	NextCursorStr     string  `json:"next_cursor_str"`
 }
 
-// Retweeters holds the users in a list.
+// Retweeters holds the retweeter's ids.
 type Retweeters struct {
 	PreviousCursor    int     `json:"previous_cursor"`
 	PreviousCursorStr string  `json:"previous_cursor_str"`
 	NextCursor        int     `json:"next_cursor"`
 	NextCursorStr     string  `json:"next_cursor_str"`
 	IDs               []int64 `json:"ids"`
+}
+
+// SearchResult holds the users in a list.
+type SearchResult struct {
+	Statuses       []*Tweet `json:""`
+	SearchMetadata struct {
+		MaxID       int64   `json:"max_id"`
+		SinceID     int64   `json:"since_id"`
+		RefreshURL  string  `json:"refresh_url"`
+		NextResults string  `json:"next_results"`
+		Count       int     `json:"count"`
+		CompletedIn float64 `json:"completed_in"`
+		SinceIDStr  string  `json:"since_id_str"`
+		Query       string  `json:"query"`
+		MaxIDStr    string  `json:"max_id_str"`
+	} `json:"search_metadata"`
+}
+
+// Trend holds the trends being retrived.
+type Trend struct {
+	Trends []struct {
+		Name            string      `json:"name"`
+		URL             string      `json:"url"`
+		PromotedContent interface{} `json:"promoted_content"`
+		Query           string      `json:"query"`
+		TweetVolume     int         `json:"tweet_volume"`
+	} `json:"trends"`
+	AsOf      time.Time `json:"as_of"`
+	CreatedAt time.Time `json:"created_at"`
+	Locations []struct {
+		Name  string `json:"name"`
+		Woeid int    `json:"woeid"`
+	} `json:"locations"`
+}
+
+// TrendAvailable is locations that Twitter has trending topic information for.
+type TrendAvailable struct {
+	Country     string `json:"country"`
+	CountryCode string `json:"countryCode"`
+	Name        string `json:"name"`
+	Parentid    int    `json:"parentid"`
+	PlaceType   struct {
+		Code int    `json:"code"`
+		Name string `json:"name"`
+	} `json:"placeType"`
+	URL   string `json:"url"`
+	Woeid int    `json:"woeid"`
+}
+
+// TrendClosest is the locations that Twitter has trending topic information for, closest to a specified location.
+type TrendClosest struct {
+	Country     string `json:"country"`
+	CountryCode string `json:"countryCode"`
+	Name        string `json:"name"`
+	Parentid    int    `json:"parentid"`
+	PlaceType   struct {
+		Code int    `json:"code"`
+		Name string `json:"name"`
+	} `json:"placeType"`
+	URL   string `json:"url"`
+	Woeid int    `json:"woeid"`
 }
